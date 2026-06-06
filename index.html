@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScholarLib PRO — AI Bulk Import Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══ ROOT — ORANGE / BLACK THEME ═══ */
+:root {
+  --bg:       #0a0a0a;
+  --bg2:      #111111;
+  --bg3:      #1a1a1a;
+  --bg4:      #222222;
+  --bg5:      #2a2a2a;
+  --orange:   #ff6b00;
+  --orange2:  #ff8c38;
+  --orange3:  rgba(255,107,0,0.13);
+  --orange4:  rgba(255,107,0,0.06);
+  --amber:    #f59e0b;
+  --amber3:   rgba(245,158,11,0.13);
+  --red:      #ef4444;
+  --red3:     rgba(239,68,68,0.13);
+  --green:    #22c55e;
+  --green3:   rgba(34,197,94,0.13);
+  --blue:     #3b82f6;
+  --blue3:    rgba(59,130,246,0.13);
+  --white:    #ffffff;
+  --text1:    #ffffff;
+  --text2:    #a0a0a0;
+  --text3:    #555555;
+  --border:   rgba(255,255,255,0.06);
+  --border2:  rgba(255,255,255,0.12);
+  --border3:  rgba(255,107,0,0.3);
+  --sans:     'Space Grotesk', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --display:  'Playfair Display', serif;
+  --r:        8px;
+  --rl:       14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text1);
+  min-height:100vh;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--bg5);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--orange);}
+
+/* ══ NOISE TEXTURE OVERLAY ══ */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.4;
+}
+
+/* ═══ HEADER ═══ */
+.hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:60px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+  position:sticky;top:0;z-index:200;
+  backdrop-filter:blur(12px);
+}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-mark{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;font-weight:700;color:#000;
+  letter-spacing:-1px;
+  box-shadow:0 0 20px rgba(255,107,0,0.4);
+}
+.logo-name{
+  font-family:var(--display);font-size:1.15rem;
+  background:linear-gradient(90deg,#fff 40%,var(--orange2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.logo-tag{font-size:10px;color:var(--orange);letter-spacing:0.15em;font-weight:600;text-transform:uppercase;margin-left:2px;vertical-align:super;}
+.hdr-center{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--text3);font-family:var(--mono);
+}
+.status-pill{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg3);border:1px solid var(--border2);
+  padding:4px 12px;border-radius:20px;font-size:12px;
+  color:var(--text2);transition:all 0.3s;
+}
+.status-pill.active{border-color:var(--orange);color:var(--orange);}
+.status-pill.done{border-color:var(--green);color:var(--green);}
+.status-pulse{
+  width:7px;height:7px;border-radius:50%;background:currentColor;
+  animation:sp 1.8s ease infinite;
+}
+@keyframes sp{0%,100%{opacity:1}50%{opacity:0.3}}
+.hdr-actions{display:flex;align-items:center;gap:8px;}
+.hdr-btn{
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text2);padding:5px 14px;border-radius:6px;
+  font-family:var(--sans);font-size:12px;cursor:pointer;
+  transition:all 0.2s;font-weight:500;
+}
+.hdr-btn:hover{border-color:var(--orange);color:var(--orange);}
+.hdr-btn.active-btn{
+  background:var(--orange3);border-color:var(--orange);color:var(--orange);
+}
+.db-badge{
+  display:flex;align-items:center;gap:6px;
+  background:var(--green3);border:1px solid var(--green);
+  color:var(--green);padding:4px 10px;border-radius:6px;
+  font-size:11px;font-weight:600;
+}
+
+/* ═══ MAIN ═══ */
+.main{max-width:1280px;margin:0 auto;padding:2rem;position:relative;z-index:1;}
+
+/* ═══ HERO UPLOAD ZONE ═══ */
+.upload-hero{
+  border:1.5px dashed var(--border2);
+  border-radius:var(--rl);
+  padding:4rem 2rem 3rem;
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.35s cubic-bezier(.4,0,.2,1);
+  background:var(--bg2);
+  position:relative;overflow:hidden;
+}
+.upload-hero::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 100%,rgba(255,107,0,0.08) 0%,transparent 70%);
+  transition:opacity 0.35s;opacity:0;
+}
+.upload-hero:hover,
+.upload-hero.drag{border-color:var(--orange);background:var(--bg3);}
+.upload-hero:hover::after,
+.upload-hero.drag::after{opacity:1;}
+.upload-hero.drag{transform:scale(1.005);}
+.upload-orb{
+  width:80px;height:80px;border-radius:50%;
+  background:var(--orange3);border:2px solid var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin:0 auto 1.5rem;
+  box-shadow:0 0 40px rgba(255,107,0,0.2);
+  animation:orb 3s ease infinite;
+  position:relative;z-index:1;
+}
+@keyframes orb{0%,100%{box-shadow:0 0 40px rgba(255,107,0,0.2)}50%{box-shadow:0 0 60px rgba(255,107,0,0.35)}}
+.upload-title{
+  font-family:var(--display);font-size:2.2rem;
+  background:linear-gradient(135deg,#fff 50%,var(--orange2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:0.5rem;position:relative;z-index:1;
+  line-height:1.2;
+}
+.upload-sub{color:var(--text2);margin-bottom:1.5rem;position:relative;z-index:1;font-size:15px;}
+.format-grid{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  position:relative;z-index:1;margin-bottom:1.5rem;
+}
+.fmt-badge{
+  background:var(--bg4);border:1px solid var(--border2);
+  color:var(--text2);padding:5px 12px;border-radius:5px;
+  font-family:var(--mono);font-size:11px;letter-spacing:0.05em;
+  transition:all 0.2s;
+}
+.fmt-badge.hi{
+  background:var(--orange3);border-color:var(--orange);
+  color:var(--orange);font-weight:600;
+}
+.fmt-badge:hover{border-color:var(--orange);color:var(--orange);}
+.browse-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--orange);color:#000;
+  padding:11px 28px;border-radius:8px;
+  font-family:var(--sans);font-weight:700;font-size:14px;
+  cursor:pointer;border:none;transition:all 0.2s;
+  position:relative;z-index:1;letter-spacing:0.02em;
+  box-shadow:0 4px 24px rgba(255,107,0,0.35);
+}
+.browse-btn:hover{background:var(--orange2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,107,0,0.45);}
+#fileInput{display:none;}
+
+/* ═══ LIBRABOT PANEL ═══ */
+.bot-panel{display:none;}
+.bot-panel.on{display:block;animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.bot-head{
+  display:flex;align-items:center;gap:14px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-bottom:none;border-radius:var(--rl) var(--rl) 0 0;
+  padding:14px 18px;
+}
+.bot-ava{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--orange3);border:2px solid var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  box-shadow:0 0 20px rgba(255,107,0,0.25);
+}
+.bot-meta .name{font-weight:700;font-size:15px;letter-spacing:0.01em;}
+.bot-meta .ver{
+  font-size:10px;font-family:var(--mono);
+  color:var(--orange);letter-spacing:0.12em;text-transform:uppercase;
+}
+.bot-stat{
+  margin-left:auto;display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--text3);font-family:var(--mono);
+}
+.chat-win{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:0 0 var(--rl) var(--rl);
+  padding:1.5rem;min-height:280px;max-height:560px;
+  overflow-y:auto;display:flex;flex-direction:column;gap:14px;
+}
+.msg{display:flex;gap:10px;animation:msgIn 0.3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.m-ava{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--orange3);border:1.5px solid var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;margin-top:2px;
+}
+.m-body{flex:1;}
+.m-text{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px 12px 12px 12px;
+  padding:10px 14px;font-size:13.5px;line-height:1.65;
+  max-width:640px;color:var(--text1);
+}
+.m-text.warn{border-color:var(--amber);background:var(--amber3);}
+.m-text.err{border-color:var(--red);background:var(--red3);}
+.m-text.ok{border-color:var(--green);background:var(--green3);}
+.m-text code{
+  font-family:var(--mono);background:var(--bg4);
+  padding:1px 6px;border-radius:3px;font-size:11.5px;color:var(--orange);
+}
+.m-text b{color:var(--white);font-weight:600;}
+.m-time{font-size:10px;color:var(--text3);margin-top:4px;font-family:var(--mono);}
+.user-msg{justify-content:flex-end;}
+.user-msg .m-text{
+  background:var(--orange3);border-color:var(--orange);
+  border-radius:12px 3px 12px 12px;margin-left:auto;
+  max-width:300px;color:var(--white);font-size:13px;
+}
+
+/* Typing */
+.typing .m-text{padding:10px 14px;}
+.dots{display:flex;gap:4px;}
+.dots span{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:d 1.2s ease infinite;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes d{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
+
+/* Progress */
+.prog-wrap{background:var(--bg4);border-radius:3px;height:5px;margin:6px 0;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange2));border-radius:3px;transition:width 0.25s ease;}
+.prog-lbl{font-size:11px;color:var(--text3);font-family:var(--mono);}
+
+/* Clarify buttons */
+.cbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;margin-left:38px;}
+.cbtn{
+  background:var(--bg4);border:1px solid var(--border2);
+  color:var(--orange);padding:6px 14px;border-radius:20px;
+  font-family:var(--sans);font-size:12px;cursor:pointer;
+  transition:all 0.2s;font-weight:500;
+}
+.cbtn:hover{background:var(--orange3);border-color:var(--orange);}
+
+/* ═══ SCHEMA PANEL ═══ */
+.section{margin-top:1.5rem;animation:fadeUp 0.4s ease;}
+.sec-hdr{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:1rem;
+}
+.sec-title{
+  font-family:var(--display);font-size:1.15rem;
+  background:linear-gradient(90deg,#fff,var(--orange2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.chip{
+  font-size:11px;font-weight:600;padding:3px 10px;
+  border-radius:4px;border:1px solid;letter-spacing:0.05em;
+  font-family:var(--mono);
+}
+.chip-or{background:var(--orange3);border-color:var(--orange);color:var(--orange);}
+.chip-gr{background:var(--green3);border-color:var(--green);color:var(--green);}
+.chip-yw{background:var(--amber3);border-color:var(--amber);color:var(--amber);}
+.chip-re{background:var(--red3);border-color:var(--red);color:var(--red);}
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--rl);overflow:hidden;
+}
+
+/* Mapping table */
+.map-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.map-tbl th{
+  text-align:left;padding:9px 14px;
+  color:var(--text3);font-weight:500;font-size:10.5px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  border-bottom:1px solid var(--border2);
+  background:var(--bg3);
+}
+.map-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);}
+.map-tbl tr:last-child td{border-bottom:none;}
+.map-tbl tr:hover td{background:var(--bg3);}
+.src-tag{
+  font-family:var(--mono);background:var(--bg4);border:1px solid var(--border2);
+  padding:2px 8px;border-radius:4px;font-size:11.5px;color:var(--white);
+}
+.arrow-cell{color:var(--text3);padding:0 4px!important;font-size:16px;}
+.c-bar-wrap{display:flex;align-items:center;gap:8px;}
+.c-bar{flex:1;background:var(--bg4);height:4px;border-radius:2px;overflow:hidden;}
+.c-fill{height:100%;border-radius:2px;}
+.c-hi{background:var(--green);}
+.c-md{background:var(--amber);}
+.c-lo{background:var(--red);}
+.c-na{background:var(--text3);}
+.c-pct{font-family:var(--mono);font-size:11px;color:var(--text3);min-width:32px;}
+.map-sel{
+  background:var(--bg4);border:1px solid var(--border2);
+  color:var(--text1);padding:4px 8px;border-radius:5px;
+  font-family:var(--sans);font-size:12px;cursor:pointer;
+  transition:border-color 0.2s;
+}
+.map-sel:focus{outline:none;border-color:var(--orange);}
+
+/* ═══ TABLE CONTROLS ═══ */
+.tbl-ctrl{
+  display:flex;gap:10px;align-items:center;
+  margin-bottom:12px;flex-wrap:wrap;
+}
+.srch{
+  flex:1;min-width:220px;
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text1);padding:9px 14px;border-radius:8px;
+  font-family:var(--sans);font-size:13px;outline:none;
+  transition:border-color 0.2s;
+}
+.srch:focus{border-color:var(--orange);}
+.srch::placeholder{color:var(--text3);}
+.flt-sel{
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text2);padding:9px 12px;border-radius:8px;
+  font-family:var(--sans);font-size:13px;cursor:pointer;
+}
+.flt-sel:focus{outline:none;border-color:var(--orange);}
+.btn-sm{
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text2);padding:9px 14px;border-radius:8px;
+  font-family:var(--sans);font-size:12px;cursor:pointer;
+  transition:all 0.2s;font-weight:500;white-space:nowrap;
+}
+.btn-sm:hover{border-color:var(--orange);color:var(--orange);}
+
+/* ═══ VIRTUAL TABLE ═══ */
+.tbl-wrap{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2);}
+.virt-head{
+  display:grid;background:var(--bg3);
+  border-bottom:1px solid var(--border2);
+  position:sticky;top:0;z-index:10;
+}
+.th{
+  padding:10px 12px;font-size:10.5px;font-weight:600;
+  color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px;
+  border-right:1px solid var(--border);transition:color 0.2s;
+}
+.th:hover{color:var(--orange);}
+.th:last-child{border-right:none;}
+.virt-scroll{height:440px;overflow-y:auto;position:relative;}
+.virt-row{
+  display:grid;border-bottom:1px solid var(--border);
+  transition:background 0.15s;
+  border-left:3px solid transparent;
+}
+.virt-row:hover{background:rgba(255,107,0,0.04);}
+.virt-row.ok{border-left-color:var(--green);}
+.virt-row.warn{border-left-color:var(--amber);}
+.virt-row.error{border-left-color:var(--red);}
+.virt-row.sel{background:rgba(255,107,0,0.06);}
+.td{
+  padding:9px 12px;font-size:12px;color:var(--text2);
+  border-right:1px solid var(--border);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  cursor:pointer;display:flex;align-items:center;
+}
+.td:last-child{border-right:none;}
+.td.editing{padding:4px 8px;}
+.td.editing input{
+  width:100%;background:var(--bg4);border:1px solid var(--orange);
+  color:var(--white);padding:4px 7px;border-radius:4px;
+  font-family:var(--mono);font-size:12px;outline:none;
+}
+.td.t-white{color:var(--white);font-weight:500;}
+.td.t-or{color:var(--orange);font-family:var(--mono);font-size:11px;}
+.td.t-bl{color:var(--blue);font-family:var(--mono);font-size:11px;}
+.s-ok{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.s-wn{width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+.s-er{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;}
+.row-cb{width:14px;height:14px;accent-color:var(--orange);cursor:pointer;}
+
+/* ═══ QUALITY REPORT ═══ */
+.q-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--rl);padding:1.5rem;
+}
+.q-title{
+  font-family:var(--display);font-size:1rem;
+  margin-bottom:1rem;color:var(--white);
+  display:flex;align-items:center;gap:8px;
+}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}
+.q-item{
+  background:var(--bg3);border-radius:var(--r);
+  padding:12px 14px;border:1px solid var(--border);
+  transition:border-color 0.2s;
+}
+.q-item:hover{border-color:var(--border2);}
+.q-lbl{font-size:10.5px;color:var(--text3);margin-bottom:5px;letter-spacing:0.05em;text-transform:uppercase;}
+.q-val{font-size:1.6rem;font-weight:700;font-family:var(--mono);}
+.qv-or{color:var(--orange);}
+.qv-gr{color:var(--green);}
+.qv-yw{color:var(--amber);}
+.qv-re{color:var(--red);}
+.qv-bl{color:var(--blue);}
+
+/* ═══ SUPABASE CONFIRM MODAL ═══ */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.75);z-index:400;
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  background:var(--bg2);border:1px solid var(--border3);
+  border-radius:var(--rl);width:90%;max-width:520px;
+  padding:2rem;animation:fadeUp 0.3s ease;
+  box-shadow:0 0 60px rgba(255,107,0,0.15);
+}
+.modal-title{
+  font-family:var(--display);font-size:1.4rem;
+  color:var(--white);margin-bottom:0.4rem;
+}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;}
+.modal-info{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--r);padding:1rem;margin-bottom:1.5rem;
+}
+.modal-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);}
+.modal-row:last-child{border-bottom:none;padding-bottom:0;}
+.modal-key{font-size:12px;color:var(--text3);}
+.modal-val{font-size:13px;font-weight:600;color:var(--white);font-family:var(--mono);}
+.modal-btns{display:flex;gap:10px;}
+.modal-confirm{
+  flex:1;background:var(--orange);color:#000;border:none;
+  padding:11px;border-radius:8px;font-family:var(--sans);
+  font-weight:700;font-size:14px;cursor:pointer;
+  transition:all 0.2s;box-shadow:0 4px 20px rgba(255,107,0,0.3);
+}
+.modal-confirm:hover{background:var(--orange2);transform:translateY(-1px);}
+.modal-confirm:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.modal-cancel{
+  background:var(--bg4);border:1px solid var(--border2);
+  color:var(--text2);padding:11px 20px;border-radius:8px;
+  font-family:var(--sans);font-size:14px;cursor:pointer;
+  transition:all 0.2s;
+}
+.modal-cancel:hover{border-color:var(--red);color:var(--red);}
+.db-progress{margin-top:1rem;display:none;}
+.db-log{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;padding:10px;font-family:var(--mono);
+  font-size:11px;color:var(--green);max-height:150px;overflow-y:auto;
+  margin-top:8px;
+}
+.db-log-line{animation:msgIn 0.2s ease;}
+.db-log-line.err{color:var(--red);}
+
+/* ═══ ACTION BAR ═══ */
+.act-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--bg2);border-top:1px solid var(--border2);
+  padding:1rem 2rem;display:none;z-index:200;
+  flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
+  backdrop-filter:blur(12px);
+}
+.act-bar.on{display:flex;}
+.btn-primary{
+  background:var(--orange);color:#000;border:none;
+  padding:11px 26px;border-radius:8px;
+  font-family:var(--sans);font-weight:700;font-size:14px;
+  cursor:pointer;display:flex;align-items:center;gap:8px;
+  transition:all 0.2s;letter-spacing:0.02em;
+  box-shadow:0 4px 24px rgba(255,107,0,0.35);
+}
+.btn-primary:hover{background:var(--orange2);transform:translateY(-1px);box-shadow:0 8px 32px rgba(255,107,0,0.45);}
+.btn-sec{
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text1);padding:11px 20px;border-radius:8px;
+  font-family:var(--sans);font-size:13px;cursor:pointer;
+  display:flex;align-items:center;gap:7px;transition:all 0.2s;
+  font-weight:500;
+}
+.btn-sec:hover{border-color:var(--orange);color:var(--orange);}
+.btn-ghost{
+  background:transparent;border:1px solid var(--border2);
+  color:var(--text3);padding:11px 18px;border-radius:8px;
+  font-family:var(--sans);font-size:13px;cursor:pointer;transition:all 0.2s;
+}
+.btn-ghost:hover{border-color:var(--red);color:var(--red);}
+.act-count{
+  font-family:var(--mono);font-size:12px;
+  color:var(--text3);padding:0 8px;
+}
+.act-spacer{height:80px;}
+
+/* ═══ TOAST ═══ */
+.toast{
+  position:fixed;bottom:90px;right:24px;
+  background:var(--bg3);border:1px solid var(--orange);
+  color:var(--white);padding:12px 18px;border-radius:var(--r);
+  font-size:13px;z-index:300;max-width:340px;
+  opacity:0;transform:translateY(10px);
+  transition:all 0.3s;pointer-events:none;
+}
+.toast.on{opacity:1;transform:translateY(0);}
+.toast.err-toast{border-color:var(--red);}
+.toast.ok-toast{border-color:var(--green);}
+
+/* ═══ STATS BAR ═══ */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:10px;margin:1.5rem 0;
+}
+.stat{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:12px 14px;
+  transition:border-color 0.2s;
+}
+.stat:hover{border-color:var(--border2);}
+.stat-lbl{font-size:10px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
+.stat-val{font-size:1.5rem;font-weight:700;font-family:var(--mono);}
+
+/* ═══ DB TABLE PREVIEW ═══ */
+.db-preview{
+  background:var(--bg);border:1px solid var(--border2);
+  border-radius:var(--r);padding:1rem;margin-top:1rem;
+  font-family:var(--mono);font-size:11px;color:var(--text2);
+  overflow-x:auto;max-height:200px;overflow-y:auto;
+}
+.db-preview table{border-collapse:collapse;width:100%;}
+.db-preview th{
+  color:var(--orange);text-transform:uppercase;
+  font-size:10px;letter-spacing:0.1em;
+  padding:4px 10px;text-align:left;
+  border-bottom:1px solid var(--border2);
+}
+.db-preview td{
+  padding:5px 10px;border-bottom:1px solid var(--border);
+  color:var(--text2);
+}
+.db-preview tr:hover td{color:var(--white);}
+
+/* ═══ MOBILE ═══ */
+@media(max-width:768px){
+  .main{padding:1rem;}
+  .upload-title{font-size:1.5rem;}
+  .q-grid{grid-template-columns:repeat(2,1fr);}
+  .tbl-ctrl{flex-direction:column;}
+  .srch{width:100%;}
+  .hdr{padding:0 1rem;}
+  .act-bar{flex-direction:column;padding:1rem;}
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">🚀 Push to ScholarLib DB</div>
+    <div class="modal-sub">Review what will be saved to Supabase before confirming.</div>
+    <div class="modal-info" id="modalInfo"></div>
+    <div class="db-preview" id="dbPreview"></div>
+    <div class="db-progress" id="dbProgress">
+      <div class="prog-wrap"><div class="prog-fill" id="dbProgFill" style="width:0%"></div></div>
+      <div class="prog-lbl" id="dbProgLbl">Preparing...</div>
+      <div class="db-log" id="dbLog"></div>
+    </div>
+    <div class="modal-btns" style="margin-top:1.5rem">
+      <button class="modal-confirm" id="modalConfirmBtn" onclick="executeSupabaseImport()">✅ Confirm & Import to DB</button>
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="logo">
+    <div class="logo-mark">SL</div>
+    <div>
+      <div class="logo-name">ScholarLib<span class="logo-tag">PRO</span></div>
+    </div>
+  </div>
+  <div class="hdr-center">
+    <div class="status-pill" id="statusPill">
+      <div class="status-pulse"></div>
+      <span id="statusTxt">Ready</span>
+    </div>
+  </div>
+  <div class="hdr-actions">
+    <div class="db-badge" id="dbBadge" style="display:none">
+      <div class="status-pulse" style="background:var(--green)"></div>
+      Supabase Connected
+    </div>
+    <button class="hdr-btn" id="startOverBtn" onclick="startOver()" style="display:none">↺ Start Over</button>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- UPLOAD ZONE -->
+<div id="uploadZone" class="upload-hero"
+  onclick="handleZoneClick(event)"
+  ondragover="event.preventDefault();this.classList.add('drag')"
+  ondragleave="this.classList.remove('drag')"
+  ondrop="handleDrop(event)">
+  <div class="upload-orb">🤖</div>
+  <h1 class="upload-title">AI Bulk Import Engine</h1>
+  <p class="upload-sub">Drop any file containing book data — LibraBot PRO will extract, clean & import it</p>
+  <div class="format-grid">
+    <span class="fmt-badge hi">CSV</span>
+    <span class="fmt-badge hi">XLSX</span>
+    <span class="fmt-badge hi">JSON</span>
+    <span class="fmt-badge hi">XML</span>
+    <span class="fmt-badge">TSV</span>
+    <span class="fmt-badge">TXT</span>
+    <span class="fmt-badge">LOG</span>
+    <span class="fmt-badge">Any Format</span>
+  </div>
+  <button class="browse-btn" onclick="event.stopPropagation();document.getElementById('fileInput').click()">
+    📂 Browse File
+  </button>
+  <input type="file" id="fileInput" accept="*/*" onchange="handleFileSelect(event)">
+  <div style="margin-top:1.5rem;font-size:11px;color:var(--text3);font-family:var(--mono)">
+    Supported columns: book_id · book_category · curriculum · subject · book_publisher · grade · tot · and many more
+  </div>
+</div>
+
+<!-- BOT PANEL -->
+<div class="bot-panel" id="botPanel">
+  <div class="bot-head">
+    <div class="bot-ava">🤖</div>
+    <div class="bot-meta">
+      <div class="name">LibraBot <span style="color:var(--orange);font-size:10px;font-weight:700;letter-spacing:0.1em">PRO v2.0</span></div>
+      <div class="ver">AI-Powered Library Intelligence</div>
+    </div>
+    <div class="bot-stat" id="botStat">
+      <div class="status-pulse" style="color:var(--orange)"></div>
+      <span>Analysing...</span>
+    </div>
+  </div>
+  <div class="chat-win" id="chatWin"></div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar" id="statsBar" style="display:none">
+  <div class="stat"><div class="stat-lbl">Total Rows</div><div class="stat-val qv-or" id="st-total">0</div></div>
+  <div class="stat"><div class="stat-lbl">✅ Ready</div><div class="stat-val qv-gr" id="st-ok">0</div></div>
+  <div class="stat"><div class="stat-lbl">⚠ Warnings</div><div class="stat-val qv-yw" id="st-warn">0</div></div>
+  <div class="stat"><div class="stat-lbl">❌ Skipped</div><div class="stat-val qv-re" id="st-err">0</div></div>
+  <div class="stat"><div class="stat-lbl">Parse Time</div><div class="stat-val qv-bl" id="st-time">—</div></div>
+  <div class="stat"><div class="stat-lbl">Confidence</div><div class="stat-val qv-or" id="st-conf">—</div></div>
+</div>
+
+<!-- MAPPING SECTION -->
+<div class="section" id="mapSection" style="display:none">
+  <div class="sec-hdr">
+    <div class="sec-title">📊 Column Mapping</div>
+    <span class="chip chip-or" id="mapConf"></span>
+  </div>
+  <div class="card">
+    <table class="map-tbl" id="mapTbl">
+      <thead>
+        <tr>
+          <th>Source Column</th>
+          <th></th>
+          <th>ScholarLib Field</th>
+          <th>Confidence</th>
+          <th>Detected Type</th>
+          <th>Sample Values</th>
+        </tr>
+      </thead>
+      <tbody id="mapBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PREVIEW SECTION -->
+<div class="section" id="prevSection" style="display:none">
+  <div class="sec-hdr">
+    <div class="sec-title">📋 Extracted Book Records</div>
+    <span class="chip chip-or" id="prevCount"></span>
+    <span class="chip chip-yw" id="warnChip" style="display:none"></span>
+    <span class="chip chip-re" id="errChip" style="display:none"></span>
+  </div>
+  <div class="tbl-ctrl">
+    <input type="text" class="srch" id="srch" placeholder="🔍 Search title, author, grade, subject..." oninput="filterTable()">
+    <select class="flt-sel" id="statusFlt" onchange="filterTable()">
+      <option value="all">All Status</option>
+      <option value="ok">✅ Ready</option>
+      <option value="warn">⚠ Warnings</option>
+      <option value="error">❌ Errors</option>
+    </select>
+    <select class="flt-sel" id="catFlt" onchange="filterTable()">
+      <option value="all">All Categories</option>
+    </select>
+    <select class="flt-sel" id="gradeFlt" onchange="filterTable()">
+      <option value="all">All Grades</option>
+    </select>
+    <button class="btn-sm" onclick="toggleAll()">☑ Select All</button>
+  </div>
+  <div class="tbl-wrap">
+    <div class="virt-head" id="virtHead"></div>
+    <div class="virt-scroll" id="virtScroll" onscroll="renderVirt()">
+      <div id="spTop"></div>
+      <div id="rowsWrap"></div>
+      <div id="spBot"></div>
+    </div>
+  </div>
+  <div style="padding:8px 12px;font-size:11px;color:var(--text3);font-family:var(--mono);display:flex;gap:16px;flex-wrap:wrap">
+    <span>Showing <b style="color:var(--white)" id="visCount">0</b> / <b style="color:var(--white)" id="totCount">0</b> rows</span>
+    <span>Double-click any cell to edit</span>
+    <span><span style="color:var(--green)">█</span> ready &nbsp;<span style="color:var(--amber)">█</span> warnings &nbsp;<span style="color:var(--red)">█</span> skipped</span>
+  </div>
+</div>
+
+<!-- QUALITY REPORT -->
+<div class="section" id="qualSection" style="display:none">
+  <div class="sec-hdr"><div class="sec-title">📈 Data Quality Report</div></div>
+  <div class="q-card">
+    <div class="q-grid" id="qGrid"></div>
+  </div>
+</div>
+
+<div class="act-spacer"></div>
+</div><!-- /main -->
+
+<!-- ACTION BAR -->
+<div class="act-bar" id="actBar">
+  <button class="btn-primary" id="importBtn" onclick="showImportModal()">🚀 Import to ScholarLib DB</button>
+  <button class="btn-sec" onclick="dlJSON()">⬇ JSON</button>
+  <button class="btn-sec" onclick="dlCSV()">⬇ CSV</button>
+  <button class="btn-sec" onclick="dlSchemaCSV()">⬇ Schema CSV</button>
+  <div class="act-count" id="actCount"></div>
+  <button class="btn-ghost" onclick="startOver()">↺ Reset</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════ */
+const SUPABASE_URL   = 'https://uvispwigefzhjvkqcxkm.supabase.co';
+const SUPABASE_ANON  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2aXNwd2lnZWZ6aGp2a3FjeGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0OTIzNDYsImV4cCI6MjA5NjA2ODM0Nn0.wPN9uyEpKswUWcYZF1HPQZXCLSh5B0OheI1jBRgBEhA';
+const SUPABASE_TABLE = 'books';
+// Fix URL (had a Cyrillic char from template)
+const SB_URL = 'https://uvispwigefzhjvkqcxkm.supabase.co';
+
+const SCHOLARLIB_CATS = [
+  'Fiction','Non-Fiction','Science','Mathematics','History',
+  'Literature','Technology','Arts','Reference','Biography',
+  'General','Geography','Philosophy','Religion','Law',
+  'Medicine','Business','Language','Sports','Music','Computer Science','Psychology'
+];
+const CAT_FUZZY = {
+  'sci-fi':'Fiction','scifi':'Fiction','fantasy':'Fiction','novel':'Fiction',
+  'nonfiction':'Non-Fiction','non fiction':'Non-Fiction',
+  'natural science':'Science','biology':'Science','chemistry':'Science','physics':'Science',
+  'maths':'Mathematics','math':'Mathematics','algebra':'Mathematics','statistics':'Mathematics',
+  'computing':'Computer Science','programming':'Computer Science','it':'Computer Science',
+  'computer sc':'Computer Science','computer':'Computer Science','cbs':'Computer Science',
+  'tech':'Technology','software':'Technology','cs':'Computer Science',
+  'bio':'Biography','autobiography':'Biography','memoir':'Biography',
+  'lit':'Literature','english lit':'Literature','psychology':'Psychology',
+  'psych':'Psychology','psy':'Psychology',
+  'general studies':'General','misc':'General','other':'General',
+  'art':'Arts','music':'Music','sports':'Sports','geography':'Geography',
+  'law':'Law','legal':'Law','medicine':'Medicine','medical':'Medicine','health':'Medicine',
+  'business':'Business','economics':'Business','finance':'Business',
+  'religion':'Religion','philosophy':'Philosophy','language':'Language',
+  'history':'History','hist':'History',
+  'competence based curriculum':'CBC','knowledge based curriculum':'KBC'
+};
+
+/* ═══ SCHOLARLIB FIELD ALIASES ═══
+   Upgraded for the new schema:
+   book_id, book_category, curriculum, subject, book_publisher, grade, tot
+*/
+const FIELD_MAP = {
+  book_id:       ['book_id','bookid','id','book id','record id','item id','ref','no','#','num'],
+  book_category: ['book_category','category','cat','genre','subject type','type','book type','user type','student','teacher'],
+  curriculum:    ['curriculum','curric','program','scheme','cbc','kbc','syllabus','course'],
+  subject:       ['subject','sub','course name','topic','discipline','title','book name','book title'],
+  book_publisher:['book_publisher','publisher','pub','press','published by','imprint','author','auth','writer'],
+  grade:         ['grade','class','level','form','year','s4','s5','s6','p1','p2','p3','p4','p5','p6','form 1','form 2'],
+  tot:           ['tot','total','qty','quantity','copies','count','stock','num','amount','nbre','exemplaires','number'],
+};
+const ALL_FIELDS = ['book_id','book_category','curriculum','subject','book_publisher','grade','tot','[Extra/Notes]','[Skipped]'];
+
+/* ═══ STATE ═══ */
+let udm = null, filtRows = [], selAll = false, idCtr = 1;
+const ROW_H = 40, BUF = 18;
+
+/* ═══ THEME / UTIL ═══ */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function yld(){ return new Promise(r=>setTimeout(r,0)); }
+function toast(msg, type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast on '+(type?type+'-toast':'');
+  setTimeout(()=>t.className='toast',3200);
+}
+function setPill(txt, cls=''){
+  const p=document.getElementById('statusPill');
+  p.className='status-pill '+(cls||'');
+  document.getElementById('statusTxt').textContent=txt;
+}
+
+/* ═══ FILE ENTRY POINTS ═══ */
+function handleZoneClick(e){
+  if(e.target.closest('.browse-btn')||e.target.id==='fileInput') return;
+  document.getElementById('fileInput').click();
+}
+function handleDrop(e){
+  e.preventDefault(); e.currentTarget.classList.remove('drag');
+  const f=e.dataTransfer.files[0]; if(f) processFile(f);
+}
+function handleFileSelect(e){ const f=e.target.files[0]; if(f) processFile(f); }
+document.addEventListener('dragover',e=>e.preventDefault());
+document.addEventListener('drop',e=>{ e.preventDefault(); if(document.getElementById('uploadZone').style.display!=='none'){ const f=e.dataTransfer.files[0]; if(f) processFile(f); } });
+
+/* ═══════════════════════════════════════
+   FILE INTELLIGENCE
+═══════════════════════════════════════ */
+function detectFmt(bytes, text, name){
+  if(bytes[0]===0x50&&bytes[1]===0x4B) return 'XLSX';
+  const t=text.trimStart();
+  if(t.startsWith('<')) return 'XML';
+  if(t.startsWith('{')||t.startsWith('[')) return 'JSON';
+  const ext=name.split('.').pop().toLowerCase();
+  if(ext==='json') return 'JSON';
+  if(ext==='xml') return 'XML';
+  if(ext==='tsv') return 'TSV';
+  if(['xlsx','xls'].includes(ext)) return 'XLSX';
+  // delimiter sniff
+  const sample=text.split('\n').slice(0,10).join('\n');
+  const tabs=(sample.match(/\t/g)||[]).length;
+  const commas=(sample.match(/,/g)||[]).length;
+  const semis=(sample.match(/;/g)||[]).length;
+  const pipes=(sample.match(/\|/g)||[]).length;
+  const max=Math.max(tabs,commas,semis,pipes);
+  if(max===tabs) return 'TSV';
+  if(max===semis) return 'CSV_SEMI';
+  if(max===pipes) return 'CSV_PIPE';
+  return 'CSV';
+}
+function detectEnc(bytes){
+  if(bytes[0]===0xFF&&bytes[1]===0xFE) return 'utf-16le';
+  if(bytes[0]===0xFE&&bytes[1]===0xFF) return 'utf-16be';
+  return 'utf-8';
+}
+
+/* ═══════════════════════════════════════
+   PARSERS
+═══════════════════════════════════════ */
+/* CSV */
+function parseCSV(text, fmt){
+  let d=',';
+  if(fmt==='TSV') d='\t';
+  else if(fmt==='CSV_SEMI') d=';';
+  else if(fmt==='CSV_PIPE') d='|';
+  else {
+    const s=text.split('\n').slice(0,6).join('\n');
+    const tabs=(s.match(/\t/g)||[]).length, commas=(s.match(/,/g)||[]).length,
+          semis=(s.match(/;/g)||[]).length, pipes=(s.match(/\|/g)||[]).length;
+    const m=Math.max(tabs,commas,semis,pipes);
+    if(m===tabs) d='\t'; else if(m===semis) d=';'; else if(m===pipes) d='|'; else d=',';
+  }
+  const lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  if(lines.length<2) return [];
+  const headers=csvLine(lines[0],d);
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    const ln=lines[i].trim(); if(!ln) continue;
+    const vals=csvLine(ln,d);
+    if(vals.every(v=>!v)) continue;
+    const row={};
+    headers.forEach((h,idx)=>{ row[h||`col${idx}`]=(vals[idx]||'').trim(); });
+    rows.push(row);
+  }
+  return rows;
+}
+function csvLine(line,d){
+  const r=[]; let c='', inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){ if(inQ&&line[i+1]==='"'){c+='"';i++;} else inQ=!inQ; }
+    else if(ch===d&&!inQ){ r.push(c.trim()); c=''; }
+    else c+=ch;
+  }
+  r.push(c.trim()); return r;
+}
+
+/* JSON */
+function parseJSON(text){
+  let d; try{d=JSON.parse(text);}catch(e){throw new Error('Invalid JSON: '+e.message);}
+  if(Array.isArray(d)) return d.length&&typeof d[0]==='object'?d.map(flatObj):[];
+  if(typeof d==='object'){
+    for(const k of Object.keys(d)) if(Array.isArray(d[k])&&d[k].length&&typeof d[k][0]==='object') return d[k].map(flatObj);
+    return [flatObj(d)];
+  }
+  return [];
+}
+function flatObj(o,p=''){
+  const f={};
+  for(const[k,v]of Object.entries(o)){
+    const key=p?`${p}.${k}`:k;
+    if(v!==null&&typeof v==='object'&&!Array.isArray(v)) Object.assign(f,flatObj(v,key));
+    else f[key]=v===null||v===undefined?'':String(v);
+  }
+  return f;
+}
+
+/* XML */
+function parseXML(text){
+  const doc=new DOMParser().parseFromString(text,'text/xml');
+  const root=doc.documentElement;
+  const childTags={};
+  root.childNodes.forEach(n=>{ if(n.nodeType===1) childTags[n.tagName]=(childTags[n.tagName]||0)+1; });
+  const recTag=Object.entries(childTags).sort((a,b)=>b[1]-a[1])[0];
+  if(!recTag) return [];
+  return Array.from(root.querySelectorAll(recTag[0])).map(rec=>{
+    const row={};
+    rec.childNodes.forEach(n=>{ if(n.nodeType===1) row[n.tagName]=n.textContent.trim(); });
+    return row;
+  }).filter(r=>Object.keys(r).length>0);
+}
+
+/* XLSX (async, pure JS) */
+async function parseXLSX(ab){
+  const bytes=new Uint8Array(ab);
+  const files=await extractZIP(bytes);
+  const ss=files['xl/sharedStrings.xml']?parseSharedStrings(files['xl/sharedStrings.xml']):[];
+  const shXml=files['xl/worksheets/sheet1.xml'];
+  if(!shXml) throw new Error('Cannot read Excel structure. Save as CSV and try again.');
+  return parseSheet(shXml,ss);
+}
+async function extractZIP(bytes){
+  const files={};
+  const toProc=[];
+  let i=0;
+  while(i<bytes.length-4){
+    if(bytes[i]===0x50&&bytes[i+1]===0x4B&&bytes[i+2]===0x03&&bytes[i+3]===0x04){
+      const fnLen=bytes[i+26]|(bytes[i+27]<<8);
+      const extLen=bytes[i+28]|(bytes[i+29]<<8);
+      const compSize=bytes[i+18]|(bytes[i+19]<<8)|(bytes[i+20]<<16)|(bytes[i+21]<<24);
+      const meth=bytes[i+8]|(bytes[i+9]<<8);
+      const fname=new TextDecoder().decode(bytes.slice(i+30,i+30+fnLen));
+      const dStart=i+30+fnLen+extLen;
+      const comp=bytes.slice(dStart,dStart+compSize);
+      if(fname.endsWith('.xml')) toProc.push({fname,meth,comp});
+      i=dStart+compSize;
+    } else i++;
+  }
+  for(const{fname,meth,comp} of toProc){
+    try{
+      if(meth===0){ files[fname]=new TextDecoder().decode(comp); }
+      else {
+        const ds=new DecompressionStream('deflate-raw');
+        const w=ds.writable.getWriter();
+        await w.write(comp); await w.close();
+        const chunks=[]; const reader=ds.readable.getReader();
+        while(true){ const{done,value}=await reader.read(); if(done)break; chunks.push(value); }
+        let tot=0; chunks.forEach(c=>tot+=c.length);
+        const merged=new Uint8Array(tot); let off=0;
+        chunks.forEach(c=>{merged.set(c,off);off+=c.length;});
+        files[fname]=new TextDecoder().decode(merged);
+      }
+    }catch(e){}
+  }
+  return files;
+}
+function parseSharedStrings(xml){
+  const doc=new DOMParser().parseFromString(xml,'text/xml');
+  return Array.from(doc.querySelectorAll('si')).map(s=>s.textContent||'');
+}
+function parseSheet(xml,ss){
+  const doc=new DOMParser().parseFromString(xml,'text/xml');
+  const allRows=[];
+  doc.querySelectorAll('row').forEach(row=>{
+    const rObj={};
+    row.querySelectorAll('c').forEach(cell=>{
+      const ref=cell.getAttribute('r');
+      const t=cell.getAttribute('t');
+      const vEl=cell.querySelector('v');
+      const inl=cell.querySelector('is > t');
+      let val='';
+      if(inl) val=inl.textContent;
+      else if(vEl){ if(t==='s') val=ss[parseInt(vEl.textContent)]||''; else val=vEl.textContent; }
+      const col=ref.replace(/[0-9]/g,'');
+      rObj[colIdx(col)]=val;
+    });
+    if(Object.keys(rObj).length>0) allRows.push(rObj);
+  });
+  if(allRows.length<2) return [];
+  const maxCol=Math.max(...allRows.map(r=>Math.max(...Object.keys(r).map(Number))));
+  const hdrs=[];
+  for(let c=0;c<=maxCol;c++) hdrs.push((allRows[0][c]||`col${c}`).trim());
+  return allRows.slice(1).map(rObj=>{
+    const row={};
+    hdrs.forEach((h,i)=>{ row[h]=(rObj[i]||'').toString().trim(); });
+    return row;
+  }).filter(r=>hdrs.some(h=>r[h]));
+}
+function colIdx(col){
+  let n=0;
+  for(let i=0;i<col.length;i++) n=n*26+(col.charCodeAt(i)-64);
+  return n-1;
+}
+
+/* TXT */
+function parseTXT(text){
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length<2) return [];
+  const sample=lines.slice(0,10).join('\n');
+  const tabs=(sample.match(/\t/g)||[]).length;
+  const pipes=(sample.match(/\|/g)||[]).length;
+  const colons=(sample.match(/:/g)||[]).length;
+  if(colons>lines.length*0.5){
+    const books=[]; let cur={};
+    for(const line of lines){
+      if(!line){ if(Object.keys(cur).length>0){books.push(cur);cur={};} continue; }
+      const[k,...rest]=line.split(':');
+      if(rest.length>0) cur[k.trim()]=rest.join(':').trim();
+    }
+    if(Object.keys(cur).length>0) books.push(cur);
+    if(books.length>0) return books;
+  }
+  const d=tabs>pipes?'\t':'|';
+  const hdrs=lines[0].split(d).map(h=>h.trim());
+  return lines.slice(1).map(l=>{
+    const vals=l.split(d);
+    const row={};
+    hdrs.forEach((h,i)=>{ row[h]=(vals[i]||'').trim(); });
+    return row;
+  });
+}
+
+/* ═══════════════════════════════════════
+   SCHEMA INFERENCE
+═══════════════════════════════════════ */
+function inferSchema(rows, headers){
+  const schema={};
+  const N=Math.min(rows.length,40);
+  for(const h of headers){
+    const vals=rows.slice(0,N).map(r=>(r[h]||'').toString().trim()).filter(Boolean);
+    const uniq=[...new Set(vals)];
+    const nullRate=1-(vals.length/N);
+    const uniqRatio=uniq.length/Math.max(vals.length,1);
+    const avgLen=vals.reduce((a,v)=>a+v.length,0)/Math.max(vals.length,1);
+    // Type
+    let type='text';
+    const isIsbn=vals.filter(v=>/^[\d]{9,13}X?$/.test(v.replace(/[\-\s]/g,'')));
+    const isNum=vals.filter(v=>/^\d+(\.\d+)?$/.test(v));
+    if(isIsbn.length>vals.length*0.5) type='isbn';
+    else if(isNum.length>vals.length*0.8) type='numeric';
+    // Grade pattern: S4, S5, P1…
+    const isGrade=vals.filter(v=>/^[SPFs]\d+$/i.test(v.trim()));
+    if(isGrade.length>vals.length*0.5) type='grade';
+    // Map
+    const hn=h.toLowerCase().trim().replace(/[^a-z0-9 _]/g,'');
+    let mapsTo=null, conf=0;
+    for(const[field,aliases] of Object.entries(FIELD_MAP)){
+      for(const alias of aliases){
+        const an=alias.replace(/[^a-z0-9 _]/g,'');
+        if(hn===an){ const s=98; if(s>conf){mapsTo=field;conf=s;} }
+        else if(hn.includes(an)||an.includes(hn)){ const s=75; if(s>conf){mapsTo=field;conf=s;} }
+        else if(hn.replace(/_/g,' ')===an.replace(/_/g,' ')){ const s=95; if(s>conf){mapsTo=field;conf=s;} }
+      }
+    }
+    // Type boosts
+    if(type==='numeric'&&!mapsTo){mapsTo='tot';conf=70;}
+    if(type==='grade'&&!mapsTo){mapsTo='grade';conf=88;}
+    if(type==='isbn'&&!mapsTo){mapsTo='book_id';conf=85;}
+    const confLvl=conf>=85?'high':conf>=50?'medium':'low';
+    schema[h]={type,mapsTo,conf,confLvl,nullRate,uniqRatio,samples:uniq.slice(0,5)};
+  }
+  // Deduplicate mappings - keep highest confidence
+  const seen={};
+  for(const h of headers){
+    const s=schema[h];
+    if(s.mapsTo){
+      if(seen[s.mapsTo]&&seen[s.mapsTo].conf>=s.conf) s.mapsTo=null;
+      else if(seen[s.mapsTo]) seen[s.mapsTo].mapsTo=null;
+      if(s.mapsTo) seen[s.mapsTo]=s;
+    }
+  }
+  return schema;
+}
+
+/* ═══════════════════════════════════════
+   NORMALIZATION
+═══════════════════════════════════════ */
+function normBook(row, schema, headers, existing){
+  const b={_status:'ok',_issues:[],_extra:{}};
+  for(const h of headers){
+    const s=schema[h];
+    const raw=(row[h]||'').toString().trim();
+    if(!s.mapsTo||s.mapsTo==='[Skipped]') continue;
+    if(s.mapsTo==='[Extra/Notes]'){b._extra[h]=raw;continue;}
+    b[s.mapsTo]=raw;
+  }
+  // book_id
+  if(!b.book_id||!b.book_id.trim()){
+    b.book_id='BK'+String(idCtr++).padStart(3,'0');
+  } else {
+    const cleaned=b.book_id.toString().replace(/\s/g,'');
+    if(existing.some(x=>x.book_id===cleaned)) b.book_id='BK'+String(idCtr++).padStart(3,'0');
+    else b.book_id=cleaned;
+  }
+  // book_category
+  if(!b.book_category||!b.book_category.trim()){
+    b.book_category='Student'; // sensible default for school libraries
+    b._issues.push('Category defaulted to Student');
+    if(b._status==='ok') b._status='warn';
+  } else b.book_category=b.book_category.trim();
+  // curriculum
+  if(!b.curriculum||!b.curriculum.trim()){
+    b.curriculum=''; b._issues.push('Missing curriculum');
+    if(b._status==='ok') b._status='warn';
+  } else b.curriculum=b.curriculum.trim();
+  // subject
+  if(!b.subject||!b.subject.trim()){
+    b._status='error'; b._issues.push('Missing subject (required)');
+    b.subject='(No Subject)';
+  } else b.subject=b.subject.trim().replace(/\s+/g,' ');
+  // book_publisher
+  b.book_publisher=(b.book_publisher||'').trim()||'';
+  // grade
+  b.grade=(b.grade||'').trim().toUpperCase();
+  // tot (quantity)
+  let tot=parseInt(b.tot)||0;
+  if(tot<=0){
+    if(b.tot&&b.tot!=='') b._issues.push('Invalid quantity → defaulted to 1');
+    tot=1; if(b._status==='ok') b._status='warn';
+  }
+  b.tot=tot;
+  // meta
+  b._rowIndex=existing.length;
+  b.importedAt=new Date().toISOString();
+  b.source='ai-import';
+  return b;
+}
+function normCat(raw){
+  if(!raw) return 'General';
+  const n=raw.toLowerCase().trim();
+  for(const cat of SCHOLARLIB_CATS) if(n===cat.toLowerCase()) return cat;
+  for(const[k,v] of Object.entries(CAT_FUZZY)) if(n.includes(k)||k.includes(n)) return v;
+  for(const cat of SCHOLARLIB_CATS) if(n.includes(cat.toLowerCase())) return cat;
+  return raw.trim()||'General';
+}
+
+/* ═══════════════════════════════════════
+   QUALITY
+═══════════════════════════════════════ */
+function buildQR(books){
+  const subjects=books.map(b=>b.subject.toLowerCase());
+  const dups=subjects.filter((s,i)=>s!=='(no subject)'&&subjects.indexOf(s)!==i);
+  return {
+    total:books.length,
+    ok:books.filter(b=>b._status==='ok').length,
+    warn:books.filter(b=>b._status==='warn').length,
+    err:books.filter(b=>b._status==='error').length,
+    dups:dups.length,
+    fixed:books.filter(b=>b._issues.length>0).length,
+    noPublisher:books.filter(b=>!b.book_publisher).length,
+    noCurric:books.filter(b=>!b.curriculum).length,
+  };
+}
+
+/* ═══════════════════════════════════════
+   LIBRABOT CHAT UI
+═══════════════════════════════════════ */
+function clearChat(){ document.getElementById('chatWin').innerHTML=''; }
+function setBotStat(txt){
+  document.getElementById('botStat').innerHTML=`<div class="status-pulse" style="color:var(--orange)"></div><span>${txt}</span>`;
+}
+async function botMsg(html, delay=0, cls=''){
+  if(delay>0) await wait(delay);
+  const win=document.getElementById('chatWin');
+  // typing indicator
+  const tid='t'+Date.now();
+  const tel=document.createElement('div');
+  tel.id=tid; tel.className='msg typing';
+  tel.innerHTML=`<div class="m-ava">🤖</div><div class="m-body"><div class="m-text"><div class="dots"><span></span><span></span><span></span></div></div></div>`;
+  win.appendChild(tel); win.scrollTop=win.scrollHeight;
+  await wait(Math.min(700, 180+html.length*1.2));
+  tel.remove();
+  const el=document.createElement('div'); el.className='msg';
+  el.innerHTML=`<div class="m-ava">🤖</div><div class="m-body"><div class="m-text ${cls}">${html.replace(/\n/g,'<br>')}</div><div class="m-time">${new Date().toLocaleTimeString()}</div></div>`;
+  win.appendChild(el); win.scrollTop=win.scrollHeight;
+}
+function userMsg(txt){
+  const win=document.getElementById('chatWin');
+  const el=document.createElement('div'); el.className='msg user-msg';
+  el.innerHTML=`<div class="m-body"><div class="m-text">${esc(txt)}</div></div>`;
+  win.appendChild(el); win.scrollTop=win.scrollHeight;
+}
+function addCbtns(labels, handlers){
+  const win=document.getElementById('chatWin');
+  const wrap=document.createElement('div'); wrap.className='cbtns';
+  labels.forEach((lbl,i)=>{
+    const btn=document.createElement('button'); btn.className='cbtn'; btn.textContent=lbl;
+    btn.onclick=()=>{wrap.remove(); handlers[i]();};
+    wrap.appendChild(btn);
+  });
+  win.appendChild(wrap); win.scrollTop=win.scrollHeight;
+}
+function addProg(){
+  const win=document.getElementById('chatWin');
+  const id='p'+Date.now();
+  const el=document.createElement('div'); el.style.marginLeft='38px'; el.id=id;
+  el.innerHTML=`<div class="prog-wrap"><div class="prog-fill" id="${id}f" style="width:0%"></div></div><div class="prog-lbl" id="${id}l">0%</div>`;
+  win.appendChild(el); win.scrollTop=win.scrollHeight;
+  return id;
+}
+function updProg(id,pct){
+  const f=document.getElementById(id+'f'); const l=document.getElementById(id+'l');
+  if(f) f.style.width=pct+'%'; if(l) l.textContent=pct+'%';
+}
+
+/* ═══════════════════════════════════════
+   MAIN PROCESS
+═══════════════════════════════════════ */
+async function processFile(file){
+  if(file.size>100*1024*1024){ toast('❌ File >100MB. Please split into smaller parts.','err'); return; }
+  document.getElementById('uploadZone').style.display='none';
+  document.getElementById('botPanel').className='bot-panel on';
+  document.getElementById('startOverBtn').style.display='block';
+  setPill('Analysing...','active');
+  setBotStat('Reading file...');
+  clearChat(); idCtr=1;
+  const t0=Date.now();
+  const ab=await file.arrayBuffer();
+  const bytes=new Uint8Array(ab);
+  const enc=detectEnc(bytes);
+  let text='';
+  try{ text=new TextDecoder(enc).decode(bytes); }catch(e){ text=new TextDecoder('utf-8',{fatal:false}).decode(bytes); }
+  if(text.charCodeAt(0)===0xFEFF) text=text.slice(1);
+  const fmt=detectFmt(bytes,text,file.name);
+  const sizeFmt=file.size>1024*1024?(file.size/1024/1024).toFixed(1)+'MB':Math.round(file.size/1024)+'KB';
+  // Stage 1
+  await botMsg(`📂 File received: <code>${esc(file.name)}</code> (${sizeFmt}). Let me analyse this...`);
+  await wait(300);
+  await botMsg(`🔍 Format fingerprint: <code>${fmt}</code> · Encoding: <code>${enc.toUpperCase()}</code>`);
+  await wait(250);
+  // Parse
+  let rows=[], parseErr=null;
+  try{
+    if(fmt==='XLSX') rows=await parseXLSX(ab);
+    else if(fmt==='JSON') rows=parseJSON(text);
+    else if(fmt==='XML') rows=parseXML(text);
+    else if(['CSV','TSV','CSV_SEMI','CSV_PIPE'].includes(fmt)) rows=parseCSV(text,fmt);
+    else rows=parseTXT(text);
+  }catch(e){ parseErr=e.message; }
+  if(parseErr||!rows||rows.length===0){
+    await botMsg(`❌ Could not parse this file. ${parseErr||'No data rows found.'}<br>Try saving as CSV from Excel, or check for encoding issues.`,'','err');
+    addCbtns(['↺ Try Again'],[startOver]);
+    setPill('Parse Error'); setBotStat('Error'); return;
+  }
+  const headers=Object.keys(rows[0]||{});
+  await botMsg(`📊 Structure: <b>TABULAR</b> · <b>${headers.length}</b> columns · <b>${rows.length}</b> rows detected`);
+  await wait(300);
+  await botMsg(`🧠 Column names found: ${headers.map(h=>`<code>${esc(h)}</code>`).join(' · ')}`);
+  await wait(400);
+  // Schema inference
+  const schema=inferSchema(rows,headers);
+  const overallConf=Math.round(Object.values(schema).reduce((a,s)=>a+s.conf,0)/Math.max(Object.keys(schema).length,1));
+  await botMsg(`🔗 Mapping columns to ScholarLib fields — overall confidence: <b>${overallConf}%</b>`);
+  showMapping(schema, headers);
+  // Check uncertain
+  const uncertain=headers.filter(h=>schema[h].mapsTo&&schema[h].conf<85&&schema[h].conf>0);
+  if(uncertain.length>0){
+    const h=uncertain[0], s=schema[h];
+    await botMsg(`⚠️ I mapped <code>${esc(h)}</code> → <b>${s.mapsTo}</b> with <b>${s.conf}%</b> confidence.\nSample values: ${s.samples.slice(0,3).map(v=>`"${esc(v)}"`).join(', ')}.\nLooks correct?`,'','warn');
+    addCbtns(['✅ Yes, keep it','I\'ll adjust in the table','Skip this column'],[
+      ()=>{ userMsg('Yes, keep it'); continueProc(file,rows,schema,headers,t0); },
+      ()=>{ userMsg('I\'ll adjust manually'); continueProc(file,rows,schema,headers,t0); },
+      ()=>{ schema[h].mapsTo=null; userMsg('Skip that column'); continueProc(file,rows,schema,headers,t0); }
+    ]);
+  } else {
+    await continueProc(file,rows,schema,headers,t0);
+  }
+}
+
+async function continueProc(file,rows,schema,headers,t0){
+  await wait(250);
+  await botMsg(`⚙️ Extracting and normalizing <b>${rows.length}</b> records...`);
+  const pid=addProg();
+  const books=[];
+  const chk=Math.min(400,Math.max(50,Math.floor(rows.length/10)));
+  for(let i=0;i<rows.length;i+=chk){
+    for(const row of rows.slice(i,i+chk)) books.push(normBook(row,schema,headers,books));
+    updProg(pid,Math.round(((i+chk)/rows.length)*100));
+    await yld();
+  }
+  updProg(pid,100);
+  const parseMs=Date.now()-t0;
+  const qr=buildQR(books);
+  const conf=Math.round(Object.values(schema).reduce((a,s)=>a+s.conf,0)/Math.max(Object.keys(schema).length,1));
+  udm={metadata:{fileName:file.name,fileSize:file.size,fmt:file.name.split('.').pop().toUpperCase(),parseMs,rows:rows.length,cols:headers.length,conf},schema,records:rows,books,qr};
+  filtRows=[...books];
+  // Stage 7
+  const ready=books.filter(b=>b._status!=='error').length;
+  const warns=books.filter(b=>b._status==='warn').length;
+  const errs=books.filter(b=>b._status==='error').length;
+  if(errs===0&&warns===0) await botMsg(`✅ <b>Perfect!</b> All ${ready} records extracted cleanly with no issues.`,'','ok');
+  else await botMsg(`✅ Done! <b>${ready}</b> records ready · <b>${warns}</b> with auto-fixes · <b>${errs}</b> skipped (missing subject).`,'','ok');
+  await wait(150);
+  await botMsg(`📋 Preview below — double-click any cell to edit. Click <b>Import to ScholarLib DB</b> when ready.`);
+  setBotStat('Complete ✓'); setPill('Ready to Import','done');
+  // Stats bar
+  document.getElementById('statsBar').style.display='grid';
+  document.getElementById('st-total').textContent=books.length;
+  document.getElementById('st-ok').textContent=qr.ok;
+  document.getElementById('st-warn').textContent=qr.warn;
+  document.getElementById('st-err').textContent=qr.err;
+  document.getElementById('st-time').textContent=parseMs+'ms';
+  document.getElementById('st-conf').textContent=conf+'%';
+  showMapping(schema,headers); // refresh
+  showPreview(books);
+  showQualReport(qr);
+  // Action bar
+  const bar=document.getElementById('actBar'); bar.className='act-bar on';
+  updActBar();
+}
+
+/* ═══════════════════════════════════════
+   MAPPING UI
+═══════════════════════════════════════ */
+function showMapping(schema,headers){
+  document.getElementById('mapSection').style.display='block';
+  const oc=Math.round(Object.values(schema).reduce((a,s)=>a+s.conf,0)/Math.max(Object.keys(schema).length,1));
+  document.getElementById('mapConf').textContent=`${oc}% avg confidence`;
+  const tbody=document.getElementById('mapBody'); tbody.innerHTML='';
+  for(const h of headers){
+    const s=schema[h];
+    const cc=s.conf>=85?'c-hi':s.conf>=50?'c-md':s.conf>0?'c-lo':'c-na';
+    const samples=s.samples.slice(0,3).map(v=>esc(String(v).slice(0,18))).join(', ')||'—';
+    const typeClr=s.type==='numeric'?'var(--blue)':s.type==='grade'?'var(--orange)':s.type==='isbn'?'var(--green)':'var(--text3)';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><span class="src-tag">${esc(h)}</span></td>
+      <td class="arrow-cell">→</td>
+      <td>
+        <select class="map-sel" data-col="${esc(h)}" onchange="updateMap(this)">
+          ${ALL_FIELDS.map(f=>`<option value="${f}"${f===s.mapsTo?' selected':''}>${f}</option>`).join('')}
+          <option value=""${!s.mapsTo?' selected':''}>— skip</option>
+        </select>
+      </td>
+      <td>
+        <div class="c-bar-wrap">
+          <div class="c-bar"><div class="c-fill ${cc}" style="width:${s.conf}%"></div></div>
+          <span class="c-pct">${s.conf>0?s.conf+'%':'N/A'}</span>
+        </div>
+      </td>
+      <td><span style="font-family:var(--mono);font-size:11px;color:${typeClr}">${s.type}</span></td>
+      <td style="color:var(--text3);font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${samples}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+function updateMap(sel){
+  if(!udm) return;
+  udm.schema[sel.dataset.col].mapsTo=sel.value||null;
+  toast(`✅ Remapped "${sel.dataset.col}" → ${sel.value||'(skipped)'}`);
+}
+
+/* ═══════════════════════════════════════
+   VIRTUAL TABLE
+═══════════════════════════════════════ */
+const COLS=[
+  {k:'_cb',   lbl:'',         w:'42px'},
+  {k:'_no',   lbl:'#',        w:'50px'},
+  {k:'_st',   lbl:'Status',   w:'70px'},
+  {k:'book_id',lbl:'Book ID', w:'80px'},
+  {k:'book_category',lbl:'Category',w:'100px'},
+  {k:'curriculum',lbl:'Curriculum',w:'140px'},
+  {k:'subject',   lbl:'Subject',   w:'160px'},
+  {k:'book_publisher',lbl:'Publisher',w:'130px'},
+  {k:'grade',  lbl:'Grade',    w:'70px'},
+  {k:'tot',    lbl:'Tot',      w:'55px'},
+  {k:'_iss',   lbl:'Issues',   w:'170px'},
+];
+const GTPL=COLS.map(c=>c.w).join(' ');
+let sortK=null, sortD=1;
+
+function showPreview(books){
+  document.getElementById('prevSection').style.display='block';
+  filtRows=[...books];
+  const cats=[...new Set(books.map(b=>b.book_category))].sort();
+  const grades=[...new Set(books.map(b=>b.grade))].filter(Boolean).sort();
+  const cs=document.getElementById('catFlt');
+  cats.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; cs.appendChild(o); });
+  const gs=document.getElementById('gradeFlt');
+  grades.forEach(g=>{ const o=document.createElement('option'); o.value=g; o.textContent=g; gs.appendChild(o); });
+  // Head
+  const head=document.getElementById('virtHead');
+  head.style.gridTemplateColumns=GTPL;
+  head.innerHTML=COLS.map(c=>{
+    if(c.k==='_cb') return `<div class="th"><input type="checkbox" id="selAllCb" class="row-cb" onchange="selAllCb(this)"></div>`;
+    return `<div class="th" onclick="sortBy('${c.k}')">${c.lbl}<span id="si_${c.k}"></span></div>`;
+  }).join('');
+  updCounts(books);
+  renderVirt();
+}
+
+function updCounts(books){
+  const ready=books.filter(b=>b._status!=='error').length;
+  const warn=books.filter(b=>b._status==='warn').length;
+  const err=books.filter(b=>b._status==='error').length;
+  document.getElementById('prevCount').textContent=`${ready} ready`;
+  const wc=document.getElementById('warnChip');
+  const ec=document.getElementById('errChip');
+  if(warn>0){wc.textContent=`${warn} warnings`;wc.style.display='';}else wc.style.display='none';
+  if(err>0){ec.textContent=`${err} skipped`;ec.style.display='';}else ec.style.display='none';
+  document.getElementById('visCount').textContent=filtRows.length;
+  document.getElementById('totCount').textContent=udm?.books?.length||0;
+}
+
+function renderVirt(){
+  const sc=document.getElementById('virtScroll');
+  const rw=document.getElementById('rowsWrap');
+  const st=document.getElementById('spTop');
+  const sb=document.getElementById('spBot');
+  const total=filtRows.length;
+  const scrollTop=sc.scrollTop;
+  const visH=sc.clientHeight||440;
+  const vStart=Math.max(0,Math.floor(scrollTop/ROW_H)-BUF);
+  const vEnd=Math.min(total,Math.ceil((scrollTop+visH)/ROW_H)+BUF);
+  st.style.height=(vStart*ROW_H)+'px';
+  sb.style.height=((total-vEnd)*ROW_H)+'px';
+  rw.innerHTML='';
+  for(let i=vStart;i<vEnd;i++){
+    const b=filtRows[i]; if(!b) continue;
+    const row=document.createElement('div');
+    row.className=`virt-row ${b._status}${b._sel?' sel':''}`;
+    row.style.gridTemplateColumns=GTPL;
+    const iss=(b._issues||[]).join('; ')||'—';
+    row.innerHTML=`
+      <div class="td"><input type="checkbox" class="row-cb"${b._sel?' checked':''} onchange="toggleRow(${i},this)"></div>
+      <div class="td" style="color:var(--text3);font-family:var(--mono);font-size:10px">${i+1}</div>
+      <div class="td">${b._status==='ok'?'<div class="s-ok"></div>':b._status==='warn'?'<div class="s-wn"></div>':'<div class="s-er"></div>'}</div>
+      <div class="td t-or" ondblclick="editTd(this,${i},'book_id')">${esc(b.book_id)}</div>
+      <div class="td" ondblclick="editTd(this,${i},'book_category')">${esc(b.book_category)}</div>
+      <div class="td" ondblclick="editTd(this,${i},'curriculum')">${esc(b.curriculum)}</div>
+      <div class="td t-white" ondblclick="editTd(this,${i},'subject')">${esc(b.subject)}</div>
+      <div class="td" ondblclick="editTd(this,${i},'book_publisher')">${esc(b.book_publisher)}</div>
+      <div class="td t-or" ondblclick="editTd(this,${i},'grade')" style="color:var(--orange2);font-weight:600">${esc(b.grade)}</div>
+      <div class="td" style="text-align:center;color:var(--white);font-weight:600;font-family:var(--mono)">${b.tot}</div>
+      <div class="td" style="color:${iss==='—'?'var(--text3)':'var(--amber)'};font-size:10.5px" title="${esc(iss)}">${esc(iss.slice(0,35)+(iss.length>35?'…':''))}</div>
+    `;
+    rw.appendChild(row);
+  }
+}
+
+function editTd(td,idx,field){
+  const b=filtRows[idx]; if(!b) return;
+  const cur=b[field]||'';
+  td.classList.add('editing'); td.innerHTML='';
+  const inp=document.createElement('input'); inp.value=cur;
+  td.appendChild(inp); inp.focus(); inp.select();
+  const save=()=>{ b[field]=inp.value.trim(); td.classList.remove('editing'); renderVirt(); updActBar(); };
+  inp.onblur=save;
+  inp.onkeydown=e=>{ if(e.key==='Enter')save(); if(e.key==='Escape'){td.innerHTML=esc(cur);td.classList.remove('editing');} };
+}
+function toggleRow(i,cb){ const b=filtRows[i]; if(b) b._sel=cb.checked; updActBar(); }
+function selAllCb(cb){ filtRows.forEach(b=>b._sel=cb.checked); selAll=cb.checked; renderVirt(); updActBar(); }
+function toggleAll(){
+  selAll=!selAll;
+  filtRows.forEach(b=>b._sel=selAll);
+  const cb=document.getElementById('selAllCb'); if(cb) cb.checked=selAll;
+  renderVirt(); updActBar();
+}
+function filterTable(){
+  if(!udm) return;
+  const q=document.getElementById('srch').value.toLowerCase();
+  const sf=document.getElementById('statusFlt').value;
+  const cf=document.getElementById('catFlt').value;
+  const gf=document.getElementById('gradeFlt').value;
+  filtRows=udm.books.filter(b=>{
+    if(sf!=='all'&&b._status!==sf) return false;
+    if(cf!=='all'&&b.book_category!==cf) return false;
+    if(gf!=='all'&&b.grade!==gf) return false;
+    if(q&&!`${b.subject} ${b.book_category} ${b.curriculum} ${b.book_publisher} ${b.grade} ${b.book_id}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('visCount').textContent=filtRows.length;
+  document.getElementById('virtScroll').scrollTop=0;
+  renderVirt();
+}
+function sortBy(k){
+  if(sortK===k) sortD*=-1; else{sortK=k;sortD=1;}
+  COLS.forEach(c=>{ const el=document.getElementById('si_'+c.k); if(el) el.textContent=''; });
+  const el=document.getElementById('si_'+k); if(el) el.textContent=sortD===1?' ↑':' ↓';
+  filtRows.sort((a,b)=>(String(a[k]||'')).localeCompare(String(b[k]||''),undefined,{numeric:true})*sortD);
+  renderVirt();
+}
+
+/* ═══════════════════════════════════════
+   QUALITY REPORT UI
+═══════════════════════════════════════ */
+function showQualReport(qr){
+  document.getElementById('qualSection').style.display='block';
+  const items=[
+    {l:'Total Rows',v:qr.total,c:'qv-or'},
+    {l:'✅ Ready',v:qr.ok,c:'qv-gr'},
+    {l:'⚠ Warnings',v:qr.warn,c:'qv-yw'},
+    {l:'❌ Skipped',v:qr.err,c:'qv-re'},
+    {l:'🔁 Duplicates',v:qr.dups,c:'qv-yw'},
+    {l:'🔧 Auto-fixed',v:qr.fixed,c:'qv-yw'},
+    {l:'📦 No Publisher',v:qr.noPublisher,c:'qv-bl'},
+    {l:'📚 No Curriculum',v:qr.noCurric,c:'qv-bl'},
+  ];
+  document.getElementById('qGrid').innerHTML=items.map(i=>`<div class="q-item"><div class="q-lbl">${i.l}</div><div class="q-val ${i.c}">${i.v}</div></div>`).join('');
+}
+
+/* ═══════════════════════════════════════
+   ACTION BAR
+═══════════════════════════════════════ */
+function getSelBooks(){
+  if(!udm) return [];
+  const sel=filtRows.filter(b=>b._sel&&b._status!=='error');
+  return sel.length>0?sel:udm.books.filter(b=>b._status!=='error');
+}
+function updActBar(){
+  const sel=getSelBooks();
+  document.getElementById('actCount').textContent=`${sel.length} books selected`;
+  document.getElementById('importBtn').textContent=`🚀 Import ${sel.length} Books to DB`;
+}
+
+/* ═══════════════════════════════════════
+   SUPABASE IMPORT
+═══════════════════════════════════════ */
+function showImportModal(){
+  const books=getSelBooks();
+  const modal=document.getElementById('modal');
+  const info=document.getElementById('modalInfo');
+  // Info rows
+  info.innerHTML=`
+    <div class="modal-row"><span class="modal-key">Source File</span><span class="modal-val">${esc(udm?.metadata?.fileName||'unknown')}</span></div>
+    <div class="modal-row"><span class="modal-key">Records to Import</span><span class="modal-val" style="color:var(--orange)">${books.length}</span></div>
+    <div class="modal-row"><span class="modal-key">Ready</span><span class="modal-val" style="color:var(--green)">${books.filter(b=>b._status==='ok').length}</span></div>
+    <div class="modal-row"><span class="modal-key">With Warnings</span><span class="modal-val" style="color:var(--amber)">${books.filter(b=>b._status==='warn').length}</span></div>
+    <div class="modal-row"><span class="modal-key">Target Table</span><span class="modal-val">books</span></div>
+    <div class="modal-row"><span class="modal-key">Supabase Project</span><span class="modal-val">uvispwigefzhjvkqcxkm</span></div>
+  `;
+  // Preview table (first 5 rows)
+  const prev=document.getElementById('dbPreview');
+  const sample=books.slice(0,5);
+  const fields=['book_id','book_category','curriculum','subject','book_publisher','grade','tot'];
+  prev.innerHTML=`<table>
+    <tr>${fields.map(f=>`<th>${f}</th>`).join('')}</tr>
+    ${sample.map(b=>`<tr>${fields.map(f=>`<td>${esc(String(b[f]||''))}</td>`).join('')}</tr>`).join('')}
+    ${books.length>5?`<tr><td colspan="${fields.length}" style="color:var(--text3);text-align:center">… and ${books.length-5} more rows</td></tr>`:''}
+  </table>`;
+  document.getElementById('dbProgress').style.display='none';
+  document.getElementById('modalConfirmBtn').disabled=false;
+  document.getElementById('modalConfirmBtn').textContent='✅ Confirm & Import to DB';
+  modal.className='modal-overlay show';
+}
+function closeModal(){ document.getElementById('modal').className='modal-overlay'; }
+
+function dbLog(msg, isErr=false){
+  const log=document.getElementById('dbLog');
+  const line=document.createElement('div');
+  line.className='db-log-line'+(isErr?' err':'');
+  line.textContent=`[${new Date().toLocaleTimeString()}] ${msg}`;
+  log.appendChild(line); log.scrollTop=log.scrollHeight;
+}
+
+async function executeSupabaseImport(){
+  const books=getSelBooks();
+  const btn=document.getElementById('modalConfirmBtn');
+  btn.disabled=true; btn.textContent='⏳ Importing...';
+  const prog=document.getElementById('dbProgress'); prog.style.display='block';
+  const fill=document.getElementById('dbProgFill');
+  const lbl=document.getElementById('dbProgLbl');
+  document.getElementById('dbLog').innerHTML='';
+  dbLog(`Starting import of ${books.length} records...`);
+  // Build payload matching exact schema
+  const payload=books.map(b=>({
+    book_id:       b.book_id,
+    book_category: b.book_category,
+    curriculum:    b.curriculum,
+    subject:       b.subject,
+    book_publisher:b.book_publisher||null,
+    grade:         b.grade||null,
+    tot:           b.tot,
+    imported_at:   b.importedAt,
+    source:        'ai-import'
+  }));
+  // Batch insert (50 at a time)
+  const BATCH=50;
+  let done=0, errors=0;
+  const sbUrl=`https://uvispwigefzhjvkqcxkm.supabase.co/rest/v1/${SUPABASE_TABLE}`;
+  for(let i=0;i<payload.length;i+=BATCH){
+    const batch=payload.slice(i,i+BATCH);
+    try{
+      const resp=await fetch(sbUrl,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'apikey':SUPABASE_ANON,
+          'Authorization':'Bearer '+SUPABASE_ANON,
+          'Prefer':'return=minimal'
+        },
+        body:JSON.stringify(batch)
+      });
+      if(resp.ok||resp.status===201){
+        done+=batch.length;
+        dbLog(`✓ Batch ${Math.ceil((i+1)/BATCH)}: ${batch.length} rows inserted`);
+      } else {
+        const errTxt=await resp.text();
+        errors+=batch.length;
+        dbLog(`✗ Batch ${Math.ceil((i+1)/BATCH)} failed: ${resp.status} ${errTxt.slice(0,80)}`,true);
+      }
+    } catch(e){
+      errors+=batch.length;
+      dbLog(`✗ Network error on batch ${Math.ceil((i+1)/BATCH)}: ${e.message}`,true);
+    }
+    const pct=Math.round(((i+BATCH)/payload.length)*100);
+    fill.style.width=Math.min(pct,100)+'%';
+    lbl.textContent=`${Math.min(i+BATCH,payload.length)} / ${payload.length} records`;
+    await yld();
+  }
+  fill.style.width='100%';
+  if(errors===0){
+    dbLog(`🎉 Import complete! ${done} records saved to ScholarLib database.`);
+    btn.textContent='✅ Done!';
+    btn.style.background='var(--green)';
+    toast(`🎉 ${done} books imported to Supabase!`,'ok');
+    setPill('Imported ✓','done');
+    document.getElementById('dbBadge').style.display='flex';
+    // postMessage for iframe
+    window.parent&&window.parent!==window&&window.parent.postMessage({type:'SCHOLARLIB_IMPORT',count:done,table:SUPABASE_TABLE},'*');
+  } else {
+    dbLog(`⚠ Completed with ${errors} errors. ${done} records succeeded.`,errors>0);
+    btn.textContent=`⚠ Partial — ${errors} errors`;
+    toast(`⚠ ${done} imported, ${errors} errors.`,'err');
+  }
+}
+
+/* ═══════════════════════════════════════
+   EXPORT
+═══════════════════════════════════════ */
+function buildPayload(){
+  const books=getSelBooks();
+  return {
+    importMeta:{engineVersion:'2.0-PRO',importedAt:new Date().toISOString(),sourceFile:udm?.metadata?.fileName,table:SUPABASE_TABLE,total:books.length},
+    books:books.map(b=>({book_id:b.book_id,book_category:b.book_category,curriculum:b.curriculum,subject:b.subject,book_publisher:b.book_publisher,grade:b.grade,tot:b.tot}))
+  };
+}
+function dlJSON(){
+  const blob=new Blob([JSON.stringify(buildPayload(),null,2)],{type:'application/json'});
+  dl(blob,'scholarlib_books.json');
+  toast('⬇ JSON downloaded!');
+}
+function dlCSV(){
+  const books=getSelBooks();
+  const h=['book_id','book_category','curriculum','subject','book_publisher','grade','tot'];
+  const lines=[h.join(','),...books.map(b=>h.map(k=>csvQ(b[k]||'')).join(','))];
+  dl(new Blob([lines.join('\n')],{type:'text/csv'}),'scholarlib_books.csv');
+  toast('⬇ CSV downloaded!');
+}
+function dlSchemaCSV(){
+  // Exports exactly the format shown by the user
+  const books=getSelBooks();
+  const lines=['book_id,book_category,curriculum,subject,book_publisher,grade,tot'];
+  books.forEach((b,i)=>lines.push([i+1,b.book_category,b.curriculum,b.subject,b.book_publisher,b.grade,b.tot].map(v=>csvQ(v||'')).join(',')));
+  dl(new Blob([lines.join('\n')],{type:'text/csv'}),'scholarlib_schema_export.csv');
+  toast('⬇ Schema CSV downloaded!');
+}
+function csvQ(v){ const s=String(v); return (s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:s; }
+function dl(blob,name){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+function startOver(){
+  udm=null; filtRows=[]; selAll=false; idCtr=1; sortK=null; sortD=1;
+  document.getElementById('uploadZone').style.display='block';
+  document.getElementById('botPanel').className='bot-panel';
+  document.getElementById('mapSection').style.display='none';
+  document.getElementById('prevSection').style.display='none';
+  document.getElementById('qualSection').style.display='none';
+  document.getElementById('statsBar').style.display='none';
+  document.getElementById('actBar').className='act-bar';
+  document.getElementById('startOverBtn').style.display='none';
+  document.getElementById('dbBadge').style.display='none';
+  document.getElementById('fileInput').value='';
+  document.getElementById('srch').value='';
+  document.getElementById('catFlt').innerHTML='<option value="all">All Categories</option>';
+  document.getElementById('gradeFlt').innerHTML='<option value="all">All Grades</option>';
+  closeModal();
+  clearChat();
+  setPill('Ready','');
+}
+
+/* ═══ KEYBOARD ═══ */
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+</script>
+</body>
+</html>
