@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ScholarLib PRO — AI Bulk Import Engine</title>
+<title>BILLAN AI — Universal Data Import Engine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <style>
@@ -14,6 +14,7 @@
   --red:#ef4444;--red3:rgba(239,68,68,0.13);
   --green:#22c55e;--green3:rgba(34,197,94,0.13);
   --blue:#3b82f6;--blue3:rgba(59,130,246,0.13);
+  --purple:#a855f7;--purple3:rgba(168,85,247,0.13);
   --white:#ffffff;--text1:#ffffff;--text2:#a0a0a0;--text3:#555555;
   --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);--border3:rgba(255,107,0,0.3);
   --sans:'Space Grotesk',sans-serif;--mono:'JetBrains Mono',monospace;--display:'Playfair Display',serif;
@@ -98,30 +99,46 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .cbtn{background:var(--bg4);border:1px solid var(--border2);color:var(--orange);padding:6px 14px;border-radius:20px;font-family:var(--sans);font-size:12px;cursor:pointer;transition:all 0.2s;font-weight:500;}
 .cbtn:hover{background:var(--orange3);border-color:var(--orange);}
 .section{margin-top:1.5rem;animation:fadeUp 0.4s ease;}
-.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap;}
 .sec-title{font-family:var(--display);font-size:1.15rem;background:linear-gradient(90deg,#fff,var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .chip{font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;border:1px solid;letter-spacing:0.05em;font-family:var(--mono);}
 .chip-or{background:var(--orange3);border-color:var(--orange);color:var(--orange);}
 .chip-gr{background:var(--green3);border-color:var(--green);color:var(--green);}
 .chip-yw{background:var(--amber3);border-color:var(--amber);color:var(--amber);}
 .chip-re{background:var(--red3);border-color:var(--red);color:var(--red);}
+.chip-bl{background:var(--blue3);border-color:var(--blue);color:var(--blue);}
+.chip-pu{background:var(--purple3);border-color:var(--purple);color:var(--purple);}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;}
+.card-pad{padding:1.25rem 1.5rem;}
+.field-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:0.75rem;}
+.field-lbl{font-size:11px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;min-width:130px;}
+.txt-input{background:var(--bg4);border:1px solid var(--border2);color:var(--white);padding:9px 12px;border-radius:7px;font-family:var(--mono);font-size:13px;outline:none;transition:border-color 0.2s;flex:1;min-width:180px;}
+.txt-input:focus{border-color:var(--orange);}
+.dataset-card{display:flex;align-items:center;gap:16px;padding:1.25rem 1.5rem;}
+.dataset-icon{width:48px;height:48px;border-radius:10px;background:var(--orange3);border:1.5px solid var(--orange);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.dataset-type{font-family:var(--display);font-size:1.3rem;text-transform:capitalize;color:var(--white);}
+.dataset-sub{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:2px;}
+.action-badge{font-size:10px;font-weight:700;letter-spacing:0.06em;padding:3px 9px;border-radius:5px;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px;}
+.action-match{background:var(--green3);color:var(--green);border:1px solid var(--green);}
+.action-new{background:var(--blue3);color:var(--blue);border:1px solid var(--blue);}
+.action-skip{background:rgba(255,255,255,0.06);color:var(--text3);border:1px solid var(--border2);}
+.action-review{background:var(--amber3);color:var(--amber);border:1px solid var(--amber);}
 .map-tbl{width:100%;border-collapse:collapse;font-size:13px;}
 .map-tbl th{text-align:left;padding:9px 14px;color:var(--text3);font-weight:500;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border2);background:var(--bg3);}
-.map-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);}
+.map-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
 .map-tbl tr:last-child td{border-bottom:none;}
 .map-tbl tr:hover td{background:var(--bg3);}
 .src-tag{font-family:var(--mono);background:var(--bg4);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-size:11.5px;color:var(--white);}
 .arrow-cell{color:var(--text3);padding:0 4px!important;font-size:16px;}
 .c-bar-wrap{display:flex;align-items:center;gap:8px;}
-.c-bar{flex:1;background:var(--bg4);height:4px;border-radius:2px;overflow:hidden;}
+.c-bar{flex:1;background:var(--bg4);height:4px;border-radius:2px;overflow:hidden;min-width:46px;}
 .c-fill{height:100%;border-radius:2px;}
 .c-hi{background:var(--green);}
 .c-md{background:var(--amber);}
 .c-lo{background:var(--red);}
 .c-na{background:var(--text3);}
 .c-pct{font-family:var(--mono);font-size:11px;color:var(--text3);min-width:32px;}
-.map-sel{background:var(--bg4);border:1px solid var(--border2);color:var(--text1);padding:4px 8px;border-radius:5px;font-family:var(--sans);font-size:12px;cursor:pointer;transition:border-color 0.2s;}
+.map-sel{background:var(--bg4);border:1px solid var(--border2);color:var(--text1);padding:4px 8px;border-radius:5px;font-family:var(--sans);font-size:12px;cursor:pointer;transition:border-color 0.2s;max-width:180px;}
 .map-sel:focus{outline:none;border-color:var(--orange);}
 .tbl-ctrl{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
 .srch{flex:1;min-width:220px;background:var(--bg3);border:1px solid var(--border2);color:var(--text1);padding:9px 14px;border-radius:8px;font-family:var(--sans);font-size:13px;outline:none;transition:border-color 0.2s;}
@@ -132,24 +149,26 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .btn-sm{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:9px 14px;border-radius:8px;font-family:var(--sans);font-size:12px;cursor:pointer;transition:all 0.2s;font-weight:500;white-space:nowrap;}
 .btn-sm:hover{border-color:var(--orange);color:var(--orange);}
 .tbl-wrap{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2);}
-.virt-head{display:grid;background:var(--bg3);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10;}
-.th{padding:10px 12px;font-size:10.5px;font-weight:600;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);transition:color 0.2s;}
+.virt-head{display:flex;background:var(--bg3);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:10;}
+.th{padding:10px 12px;font-size:10.5px;font-weight:600;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);transition:color 0.2s;flex-shrink:0;}
 .th:hover{color:var(--orange);}
 .th:last-child{border-right:none;}
+.virt-outer{overflow-x:auto;}
 .virt-scroll{height:440px;overflow-y:auto;position:relative;}
-.virt-row{display:grid;border-bottom:1px solid var(--border);transition:background 0.15s;border-left:3px solid transparent;}
+.virt-row{display:flex;border-bottom:1px solid var(--border);transition:background 0.15s;border-left:3px solid transparent;}
 .virt-row:hover{background:rgba(255,107,0,0.04);}
 .virt-row.ok{border-left-color:var(--green);}
 .virt-row.warn{border-left-color:var(--amber);}
 .virt-row.error{border-left-color:var(--red);}
 .virt-row.sel{background:rgba(255,107,0,0.06);}
-.td{padding:9px 12px;font-size:12px;color:var(--text2);border-right:1px solid var(--border);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;display:flex;align-items:center;}
+.td{padding:9px 12px;font-size:12px;color:var(--text2);border-right:1px solid var(--border);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;display:flex;align-items:center;flex-shrink:0;}
 .td:last-child{border-right:none;}
 .td.editing{padding:4px 8px;}
 .td.editing input{width:100%;background:var(--bg4);border:1px solid var(--orange);color:var(--white);padding:4px 7px;border-radius:4px;font-family:var(--mono);font-size:12px;outline:none;}
 .td.t-white{color:var(--white);font-weight:500;}
 .td.t-or{color:var(--orange);font-family:var(--mono);font-size:11px;}
 .td.t-bl{color:var(--blue);font-family:var(--mono);font-size:11px;}
+.td.t-null{color:var(--text3);font-style:italic;}
 .s-ok{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .s-wn{width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;}
 .s-er{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;}
@@ -165,29 +184,32 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .qv-yw{color:var(--amber);}
 .qv-re{color:var(--red);}
 .qv-bl{color:var(--blue);}
+.ddl-box{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);padding:1rem;font-family:var(--mono);font-size:12px;color:var(--green);white-space:pre-wrap;overflow-x:auto;max-height:280px;overflow-y:auto;line-height:1.6;}
+.ddl-box .kw{color:var(--orange2);}
+.ddl-box .cm{color:var(--text3);}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:400;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-overlay.show{display:flex;}
-.modal{background:var(--bg2);border:1px solid var(--border3);border-radius:var(--rl);width:90%;max-width:560px;padding:2rem;animation:fadeUp 0.3s ease;box-shadow:0 0 60px rgba(255,107,0,0.15);max-height:90vh;overflow-y:auto;}
+.modal{background:var(--bg2);border:1px solid var(--border3);border-radius:var(--rl);width:92%;max-width:640px;padding:2rem;animation:fadeUp 0.3s ease;box-shadow:0 0 60px rgba(255,107,0,0.15);max-height:90vh;overflow-y:auto;}
 .modal-title{font-family:var(--display);font-size:1.4rem;color:var(--white);margin-bottom:0.4rem;}
 .modal-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;}
 .modal-info{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:1rem;margin-bottom:1rem;}
-.modal-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);}
+.modal-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);gap:10px;}
 .modal-row:last-child{border-bottom:none;padding-bottom:0;}
 .modal-key{font-size:12px;color:var(--text3);}
-.modal-val{font-size:13px;font-weight:600;color:var(--white);font-family:var(--mono);}
+.modal-val{font-size:13px;font-weight:600;color:var(--white);font-family:var(--mono);text-align:right;}
 .modal-btns{display:flex;gap:10px;margin-top:1.5rem;}
 .modal-confirm{flex:1;background:var(--orange);color:#000;border:none;padding:11px;border-radius:8px;font-family:var(--sans);font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(255,107,0,0.3);}
 .modal-confirm:hover{background:var(--orange2);transform:translateY(-1px);}
 .modal-confirm:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 .modal-cancel{background:var(--bg4);border:1px solid var(--border2);color:var(--text2);padding:11px 20px;border-radius:8px;font-family:var(--sans);font-size:14px;cursor:pointer;transition:all 0.2s;}
 .modal-cancel:hover{border-color:var(--red);color:var(--red);}
+.modal-check{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);margin-bottom:1rem;}
 .db-progress{margin-top:1rem;display:none;}
 .db-log{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:var(--mono);font-size:11px;color:var(--green);max-height:180px;overflow-y:auto;margin-top:8px;line-height:1.7;}
 .db-log-line{animation:msgIn 0.2s ease;}
 .db-log-line.err{color:var(--red);}
 .db-log-line.warn{color:var(--amber);}
 .db-log-line.info{color:var(--blue);}
-/* Connection test banner */
 .conn-banner{display:none;margin-bottom:1rem;padding:10px 16px;border-radius:8px;font-size:12px;font-family:var(--mono);align-items:center;gap:8px;border:1px solid;}
 .conn-banner.show{display:flex;}
 .conn-banner.testing{background:var(--blue3);border-color:var(--blue);color:var(--blue);}
@@ -197,6 +219,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .act-bar.on{display:flex;}
 .btn-primary{background:var(--orange);color:#000;border:none;padding:11px 26px;border-radius:8px;font-family:var(--sans);font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s;letter-spacing:0.02em;box-shadow:0 4px 24px rgba(255,107,0,0.35);}
 .btn-primary:hover{background:var(--orange2);transform:translateY(-1px);box-shadow:0 8px 32px rgba(255,107,0,0.45);}
+.btn-primary:disabled{opacity:0.45;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-sec{background:var(--bg3);border:1px solid var(--border2);color:var(--text1);padding:11px 20px;border-radius:8px;font-family:var(--sans);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all 0.2s;font-weight:500;}
 .btn-sec:hover{border-color:var(--orange);color:var(--orange);}
 .btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text3);padding:11px 18px;border-radius:8px;font-family:var(--sans);font-size:13px;cursor:pointer;transition:all 0.2s;}
@@ -213,9 +236,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .stat-val{font-size:1.5rem;font-weight:700;font-family:var(--mono);}
 .db-preview{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);padding:1rem;margin-top:0.5rem;font-family:var(--mono);font-size:11px;color:var(--text2);overflow-x:auto;max-height:160px;overflow-y:auto;}
 .db-preview table{border-collapse:collapse;width:100%;}
-.db-preview th{color:var(--orange);text-transform:uppercase;font-size:10px;letter-spacing:0.1em;padding:4px 10px;text-align:left;border-bottom:1px solid var(--border2);}
-.db-preview td{padding:5px 10px;border-bottom:1px solid var(--border);color:var(--text2);}
+.db-preview th{color:var(--orange);text-transform:uppercase;font-size:10px;letter-spacing:0.1em;padding:4px 10px;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap;}
+.db-preview td{padding:5px 10px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap;}
 .db-preview tr:hover td{color:var(--white);}
+.setup-warn{display:none;background:var(--red3);border:1px solid var(--red);color:var(--red);border-radius:var(--r);padding:14px 16px;font-size:12.5px;line-height:1.6;margin-bottom:1rem;}
+.setup-warn.show{display:block;}
+.setup-warn code{background:var(--bg4);padding:1px 6px;border-radius:3px;color:var(--white);font-family:var(--mono);}
 @media(max-width:768px){
   .main{padding:1rem;}
   .upload-title{font-size:1.5rem;}
@@ -225,6 +251,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   .hdr{padding:0 1rem;}
   .act-bar{flex-direction:column;padding:1rem;}
   .stats-bar{grid-template-columns:repeat(2,1fr);}
+  .field-lbl{min-width:100%;}
 }
 </style>
 </head>
@@ -233,16 +260,21 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <!-- MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
-    <div class="modal-title">🚀 Push to ScholarLib DB</div>
-    <div class="modal-sub">Review what will be saved to Supabase before confirming.</div>
+    <div class="modal-title">🚀 Push to database</div>
+    <div class="modal-sub">Review the schema changes and data before anything touches Supabase.</div>
 
-    <!-- Live connection test banner inside modal -->
     <div class="conn-banner testing show" id="modalConnBanner">
       <div class="status-pulse"></div>
       <span id="modalConnTxt">Testing connection to Supabase...</span>
     </div>
 
     <div class="modal-info" id="modalInfo"></div>
+
+    <label class="modal-check" id="upsertRow" style="display:none">
+      <input type="checkbox" class="row-cb" id="upsertChk">
+      Upsert on <span id="upsertKeyLbl" style="color:var(--orange);font-family:var(--mono)"></span> instead of plain insert (updates existing rows with a matching key)
+    </label>
+
     <div class="db-preview" id="dbPreview"></div>
     <div class="db-progress" id="dbProgress">
       <div class="prog-wrap"><div class="prog-fill" id="dbProgFill" style="width:0%"></div></div>
@@ -250,9 +282,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="db-log" id="dbLog"></div>
     </div>
     <div class="modal-btns">
-      <button class="modal-confirm" id="modalConfirmBtn" onclick="executeSupabaseImport()" disabled>⏳ Testing connection…</button>
+      <button class="modal-confirm" id="modalConfirmBtn" onclick="executeImport()" disabled>⏳ Testing connection…</button>
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
     </div>
+    <button class="btn-sm" id="failedRowsBtn" onclick="dlFailedRows()" style="display:none;width:100%;margin-top:10px">⬇ Download Failed Rows (CSV)</button>
   </div>
 </div>
 
@@ -261,7 +294,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="logo">
     <div class="logo-mark">$</div>
     <div>
-      <div class="logo-name">BILLAN AI<span class="logo-tag">PRO</span></div>
+      <div class="logo-name">BILLAN AI<span class="logo-tag">Universal Import</span></div>
     </div>
   </div>
   <div class="hdr-center">
@@ -285,6 +318,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 <div class="main">
 
+<div class="setup-warn" id="setupWarn">
+  ⚠ <b>The dynamic-schema RPC functions weren't found</b> on this Supabase project (<code>import_engine_table_exists</code> etc).
+  Tables can't be auto-created or auto-altered without them. Run <code>supabase_setup.sql</code> once in your
+  Supabase SQL Editor, then click <b>Test DB</b> again. You can still import into a table that already has every
+  column the file needs.
+</div>
+
 <!-- UPLOAD ZONE -->
 <div id="uploadZone" class="upload-hero"
   onclick="handleZoneClick(event)"
@@ -292,8 +332,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   ondragleave="this.classList.remove('drag')"
   ondrop="handleDrop(event)">
   <div class="upload-orb">🤖</div>
-  <h1 class="upload-title">BILLAN AI data Import Engine</h1>
-  <p class="upload-sub">Drop any file containing book data — BILLAN AI PRO will extract, clean & import it</p>
+  <h1 class="upload-title">Universal AI Import Engine</h1>
+  <p class="upload-sub">Drop any dataset — books, products, employees, customers, anything — and it'll be read, typed, schema'd and imported. No mapping file required.</p>
   <div class="format-grid">
     <span class="fmt-badge hi">CSV</span>
     <span class="fmt-badge hi">XLSX</span>
@@ -309,7 +349,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   </button>
   <input type="file" id="fileInput" accept="*/*" onchange="handleFileSelect(event)">
   <div style="margin-top:1.5rem;font-size:11px;color:var(--text3);font-family:var(--mono)">
-    RIGHT CHOICE TO USE ME.
+    NO SCHEMA. NO MAPPING FILE. NO PROBLEM.
   </div>
 </div>
 
@@ -318,8 +358,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="bot-head">
     <div class="bot-ava">🤖</div>
     <div class="bot-meta">
-      <div class="name">BILLAN AI<span style="color:var(--orange);font-size:10px;font-weight:700;letter-spacing:0.1em">PRO v2.1</span></div>
-      <div class="ver">BILLAN AI-Powered Library Intelligence</div>
+      <div class="name">BILLAN AI<span style="color:var(--orange);font-size:10px;font-weight:700;letter-spacing:0.1em"> PRO v3.0</span></div>
+      <div class="ver">Universal Schema-Driven Import Engine</div>
     </div>
     <div class="bot-stat" id="botStat">
       <div class="status-pulse" style="color:var(--orange)"></div>
@@ -329,6 +369,31 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="chat-win" id="chatWin"></div>
 </div>
 
+<!-- DATASET / TABLE SECTION -->
+<div class="section" id="datasetSection" style="display:none">
+  <div class="sec-hdr">
+    <div class="sec-title">🧬 Detected Dataset</div>
+    <span class="chip chip-or" id="datasetConf"></span>
+  </div>
+  <div class="card">
+    <div class="dataset-card">
+      <div class="dataset-icon" id="datasetIcon">📦</div>
+      <div style="flex:1">
+        <div class="dataset-type" id="datasetType">generic</div>
+        <div class="dataset-sub" id="datasetSub">—</div>
+      </div>
+    </div>
+    <div class="card-pad" style="border-top:1px solid var(--border);padding-top:1rem">
+      <div class="field-row">
+        <span class="field-lbl">Target table</span>
+        <input type="text" class="txt-input" id="tableNameInput" oninput="onTableNameEdit()">
+        <button class="btn-sm" onclick="checkDatabase()">🔎 Check Database</button>
+      </div>
+      <div class="conn-banner" id="tableCheckBanner" style="margin-bottom:0"></div>
+    </div>
+  </div>
+</div>
+
 <!-- STATS BAR -->
 <div class="stats-bar" id="statsBar" style="display:none">
   <div class="stat"><div class="stat-lbl">Total Rows</div><div class="stat-val qv-or" id="st-total">0</div></div>
@@ -336,21 +401,24 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="stat"><div class="stat-lbl">⚠ Warnings</div><div class="stat-val qv-yw" id="st-warn">0</div></div>
   <div class="stat"><div class="stat-lbl">❌ Skipped</div><div class="stat-val qv-re" id="st-err">0</div></div>
   <div class="stat"><div class="stat-lbl">Parse Time</div><div class="stat-val qv-bl" id="st-time">—</div></div>
-  <div class="stat"><div class="stat-lbl">Confidence</div><div class="stat-val qv-or" id="st-conf">—</div></div>
+  <div class="stat"><div class="stat-lbl">Columns</div><div class="stat-val qv-or" id="st-cols">—</div></div>
 </div>
 
 <!-- MAPPING SECTION -->
 <div class="section" id="mapSection" style="display:none">
   <div class="sec-hdr">
     <div class="sec-title">📊 Column Mapping</div>
-    <span class="chip chip-or" id="mapConf"></span>
+    <span class="chip chip-gr" id="mapMatch" style="display:none"></span>
+    <span class="chip chip-bl" id="mapNew" style="display:none"></span>
+    <span class="chip chip-yw" id="mapReview" style="display:none"></span>
+    <span class="chip chip-re" id="mapSkip" style="display:none"></span>
   </div>
   <div class="card">
     <table class="map-tbl" id="mapTbl">
       <thead>
         <tr>
-          <th>Source Column</th><th></th><th>ScholarLib Field</th>
-          <th>Confidence</th><th>Detected Type</th><th>Sample Values</th>
+          <th>Source Column</th><th></th><th>Database Column</th>
+          <th>Confidence</th><th>Detected Type</th><th>Sample Values</th><th>Action</th>
         </tr>
       </thead>
       <tbody id="mapBody"></tbody>
@@ -358,30 +426,41 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   </div>
 </div>
 
+<!-- SCHEMA / DDL PREVIEW -->
+<div class="section" id="ddlSection" style="display:none">
+  <div class="sec-hdr">
+    <div class="sec-title">🛠 Schema Changes</div>
+    <span class="chip chip-pu" id="ddlChip"></span>
+  </div>
+  <div class="card card-pad">
+    <div class="ddl-box" id="ddlBox"></div>
+  </div>
+</div>
+
 <!-- PREVIEW SECTION -->
 <div class="section" id="prevSection" style="display:none">
   <div class="sec-hdr">
-    <div class="sec-title">📋 Extracted Book Records</div>
+    <div class="sec-title">📋 Extracted Records</div>
     <span class="chip chip-or" id="prevCount"></span>
     <span class="chip chip-yw" id="warnChip" style="display:none"></span>
     <span class="chip chip-re" id="errChip" style="display:none"></span>
   </div>
   <div class="tbl-ctrl">
-    <input type="text" class="srch" id="srch" placeholder="🔍 Search title, author, grade, subject..." oninput="filterTable()">
+    <input type="text" class="srch" id="srch" placeholder="🔍 Search this data..." oninput="filterTable()">
     <select class="flt-sel" id="statusFlt" onchange="filterTable()">
       <option value="all">All Status</option>
       <option value="ok">✅ Ready</option>
       <option value="warn">⚠ Warnings</option>
       <option value="error">❌ Errors</option>
     </select>
-    <select class="flt-sel" id="catFlt" onchange="filterTable()"><option value="all">All Categories</option></select>
-    <select class="flt-sel" id="gradeFlt" onchange="filterTable()"><option value="all">All Grades</option></select>
     <button class="btn-sm" onclick="toggleAll()">☑ Select All</button>
   </div>
   <div class="tbl-wrap">
-    <div class="virt-head" id="virtHead"></div>
-    <div class="virt-scroll" id="virtScroll" onscroll="renderVirt()">
-      <div id="spTop"></div><div id="rowsWrap"></div><div id="spBot"></div>
+    <div class="virt-outer">
+      <div class="virt-head" id="virtHead"></div>
+      <div class="virt-scroll" id="virtScroll" onscroll="renderVirt()">
+        <div id="spTop"></div><div id="rowsWrap"></div><div id="spBot"></div>
+      </div>
     </div>
   </div>
   <div style="padding:8px 12px;font-size:11px;color:var(--text3);font-family:var(--mono);display:flex;gap:16px;flex-wrap:wrap">
@@ -402,10 +481,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 <!-- ACTION BAR -->
 <div class="act-bar" id="actBar">
-  <button class="btn-primary" id="importBtn" onclick="showImportModal()">🚀 Import to ScholarLib DB</button>
+  <button class="btn-primary" id="importBtn" onclick="showImportModal()">🚀 Import to Database</button>
   <button class="btn-sec" onclick="dlJSON()">⬇ JSON</button>
   <button class="btn-sec" onclick="dlCSV()">⬇ CSV</button>
-  <button class="btn-sec" onclick="dlSchemaCSV()">⬇ Schema CSV</button>
+  <button class="btn-sec" onclick="dlSchemaSQL()">⬇ Schema SQL</button>
   <div class="act-count" id="actCount"></div>
   <button class="btn-ghost" onclick="startOver()">↺ Reset</button>
 </div>
@@ -413,18 +492,46 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════
-   SUPABASE CONFIG
-   ─ URL and anon key for project uvispwigefzhjvkqcxkm
-══════════════════════════════════════ */
-const SB_URL   = 'https://uvispwigefzhjvkqcxkm.supabase.co';
-const SB_ANON  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2aXNwd2lnZWZ6aGp2a3FjeGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0OTIzNDYsImV4cCI6MjA5NjA2ODM0Nn0.wPN9uyEpKswUWcYZF1HPQZXCLSh5B0OheI1jBRgBEhA';
-const SB_TABLE = 'books';
+/* ══════════════════════════════════════════════════════════════════
+   UNIVERSAL AI IMPORT ENGINE
+   ──────────────────────────────────────────────────────────────────
+   This file replaces the old book-only importer. There is no
+   FIELD_MAP, no ALL_FIELDS, no hardcoded "books" table, no book_id /
+   subject / grade / publisher anywhere below. Every column the
+   uploaded file contains is discovered, typed, and either matched to
+   an existing database column or proposed as a new one — for ANY
+   dataset shape.
 
-/* Supabase REST headers — ONLY the headers that PostgREST accepts.
-   REMOVED: 'Content-Profile' (causes PGRST204 schema resolution error)
-   REMOVED: 'resolution=merge-duplicates' from Prefer (requires unique constraint on book_id)
-*/
+   Supabase note: PostgREST (the REST API anon key talks to) can only
+   do CRUD on tables that already exist. It cannot CREATE TABLE or
+   ALTER TABLE. So schema evolution (creating tables / adding columns)
+   goes through a handful of small RPC functions defined in
+   supabase_setup.sql — run that once per project. Everything else
+   (inserts, upserts, discovery reads) is plain PostgREST.
+══════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────────
+   SUPABASE CONFIG
+   SB_ANON below is the PUBLISHABLE "anon" key (decode its JWT payload
+   yourself: role:"anon"). It is *designed* to be embedded in browser
+   code and is safe on GitHub Pages — Supabase enforces what it can do
+   via Row Level Security (RLS) policies and function grants on the
+   database side, not by hiding this key.
+
+   NEVER put a service_role key here, in this file, in any other
+   client-side file, or anywhere a browser can read it. service_role
+   bypasses RLS entirely; if it leaks, anyone can read/write/drop any
+   table in the project. The only places a service_role key may ever
+   live are: a server-side environment variable (Edge Function /
+   backend), or nowhere at all if you only use the SECURITY DEFINER
+   RPC pattern below (recommended — see supabase_setup.sql).
+
+   Replace these two values to point the importer at a different
+   Supabase project.
+────────────────────────────────────────────────────────────────── */
+const SB_URL  = 'https://uvispwigefzhjvkqcxkm.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2aXNwd2lnZWZ6aGp2a3FjeGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0OTIzNDYsImV4cCI6MjA5NjA2ODM0Nn0.wPN9uyEpKswUWcYZF1HPQZXCLSh5B0OheI1jBRgBEhA'; // role:"anon" — confirmed safe for client-side use
+
 function sbHeaders(extra = {}) {
   return {
     'Content-Type'  : 'application/json',
@@ -433,35 +540,76 @@ function sbHeaders(extra = {}) {
     ...extra
   };
 }
+async function sbRpc(fn, params) {
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+    method: 'POST', headers: sbHeaders(), body: JSON.stringify(params)
+  });
+  if (!r.ok) {
+    let detail = '';
+    try { const j = await r.json(); detail = j.message || j.hint || JSON.stringify(j); }
+    catch(e) { detail = await r.text().catch(()=> ''); }
+    const err = new Error(detail || `RPC ${fn} failed (${r.status})`);
+    err.status = r.status;
+    throw err;
+  }
+  const ct = r.headers.get('content-type')||'';
+  return ct.includes('json') ? r.json() : null;
+}
 
-/* ══════════════════════════════════════
+/* ──────────────────────────────────────────────────────────────────
    CONNECTION TEST
-══════════════════════════════════════ */
+   Hits a real table (public.ai_healthcheck, defined in
+   supabase_setup.sql) behind RLS instead of the bare /rest/v1/ root.
+   This proves: the URL/anon key pair is valid, AND PostgREST can
+   actually serve a SELECT under RLS with this key — which is a much
+   stronger signal than just getting a 200 from the API root. Then it
+   probes one of the import_engine RPCs (proves supabase_setup.sql has
+   been run). Both are required for full functionality; only the first
+   is required to import into a table that already has every column.
+   None of this ever touches a service_role-only endpoint.
+────────────────────────────────────────────────────────────────── */
 let sbConnected = false;
+let rpcInstalled = null; // null = unknown, true/false once checked
 
 async function pingSupabase(showToast = false) {
-  const badge   = document.getElementById('connBadge');
-  const txt     = document.getElementById('connTxt');
+  const badge = document.getElementById('connBadge');
+  const txt   = document.getElementById('connTxt');
   badge.className = 'conn-badge';
   txt.textContent = 'Testing…';
   try {
-    const r = await fetch(`${SB_URL}/rest/v1/${SB_TABLE}?select=book_id&limit=1`, {
-      headers: sbHeaders()
-    });
-    if (r.ok || r.status === 200 || r.status === 206) {
-      sbConnected = true;
-      badge.className = 'conn-badge connected';
-      txt.textContent = 'DB Connected ✓';
-      if (showToast) toast('✅ Supabase connected — books table found!', 'ok');
-      return true;
-    } else {
-      const body = await r.text();
+    const r = await fetch(`${SB_URL}/rest/v1/ai_healthcheck?select=id&limit=1`, { headers: sbHeaders() });
+    if (!r.ok) {
       sbConnected = false;
       badge.className = 'conn-badge error';
-      txt.textContent = 'DB Error ' + r.status;
-      if (showToast) toast('❌ DB error ' + r.status + ': ' + body.slice(0, 80), 'err');
+      if (r.status === 404 || r.status === 406) {
+        txt.textContent = 'Setup needed';
+        if (showToast) toast('⚠ Connected, but public.ai_healthcheck doesn\'t exist yet — run supabase_setup.sql in the SQL Editor first.', 'err');
+      } else if (r.status === 401 || r.status === 403) {
+        txt.textContent = 'Auth Error';
+        if (showToast) toast('❌ Anon key rejected (' + r.status + '). Double-check SB_URL/SB_ANON and that ai_healthcheck has an anon SELECT policy.', 'err');
+      } else {
+        txt.textContent = 'DB Error ' + r.status;
+        if (showToast) toast('❌ Could not reach Supabase (' + r.status + ')', 'err');
+      }
       return false;
     }
+    sbConnected = true;
+    // probe RPC presence with a harmless call — these are SECURITY
+    // DEFINER functions from supabase_setup.sql, never service_role calls
+    try {
+      await sbRpc('import_engine_table_exists', { p_table: 'import_engine_probe_table' });
+      rpcInstalled = true;
+    } catch(e) {
+      rpcInstalled = (e.status !== 404 && e.status !== undefined) ? rpcInstalled : false;
+      if (e.status === 404 || /could not find/i.test(String(e.message))) rpcInstalled = false;
+    }
+    document.getElementById('setupWarn').className = rpcInstalled === false ? 'setup-warn show' : 'setup-warn';
+    badge.className = 'conn-badge connected';
+    txt.textContent = rpcInstalled === false ? 'Connected (no RPCs)' : 'DB Connected ✓';
+    if (showToast) toast(rpcInstalled === false
+      ? '✅ Connected, but the setup SQL hasn\'t been run yet — see the warning banner.'
+      : '✅ Supabase connected — dynamic schema RPCs found!', rpcInstalled === false ? '' : 'ok');
+    return true;
   } catch(e) {
     sbConnected = false;
     badge.className = 'conn-badge error';
@@ -470,60 +618,131 @@ async function pingSupabase(showToast = false) {
     return false;
   }
 }
-
-// Auto-ping on load
 pingSupabase(false);
 
-/* ══════════════════════════════════════
-   FIELD SCHEMA
-══════════════════════════════════════ */
-const FIELD_MAP = {
-  book_id:        ['book_id','bookid','id','book id','record id','item id','ref','no','#','num'],
-  book_category:  ['book_category','category','cat','genre','subject type','type','book type','user type','student','teacher'],
-  curriculum:     ['curriculum','curric','program','scheme','cbc','kbc','syllabus','course'],
-  subject:        ['subject','sub','course name','topic','discipline','title','book name','book title'],
-  book_publisher: ['book_publisher','publisher','pub','press','published by','imprint','author','auth','writer'],
-  grade:          ['grade','class','level','form','year','s4','s5','s6','p1','p2','p3','p4','p5','p6','form 1','form 2'],
-  tot:            ['tot','total','qty','quantity','copies','count','stock','num','amount','nbre','exemplaires','number'],
-  pages:          ['number of pages']
+/* ══════════════════════════════════════════════════════════════════
+   TYPE SYSTEM
+══════════════════════════════════════════════════════════════════ */
+const SQL_TYPE = {
+  text:'text', integer:'bigint', decimal:'numeric', boolean:'boolean',
+  date:'date', datetime:'timestamptz', email:'text', phone:'text',
+  url:'text', json:'jsonb', uuid:'uuid'
 };
-const ALL_FIELDS = ['book_id','book_category','curriculum','subject','book_publisher','grade','tot','pages','[Skipped]'];
 
-/* ══════════════════════════════════════
-   STATE
-══════════════════════════════════════ */
-let udm = null, filtRows = [], selAll = false, idCtr = 1;
-const ROW_H = 40, BUF = 18;
-
-/* ══════════════════════════════════════
-   UTILS
-══════════════════════════════════════ */
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
-function yld(){ return new Promise(r=>setTimeout(r,0)); }
-function toast(msg, type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast on '+(type?type+'-toast':'');
-  setTimeout(()=>t.className='toast',3500);
+function looksLikeDate(v){
+  return /^\d{4}-\d{2}-\d{2}$/.test(v) || /^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(v) || /^\d{1,2}-\d{1,2}-\d{4}$/.test(v) || /^\d{1,2}\.\d{1,2}\.\d{4}$/.test(v);
 }
-function setPill(txt,cls=''){
-  const p=document.getElementById('statusPill');
-  p.className='status-pill '+(cls||'');
-  document.getElementById('statusTxt').textContent=txt;
+function looksLikeDatetime(v){
+  return /^\d{4}-\d{2}-\d{2}[ T]\d{1,2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?$/.test(v);
+}
+const TYPE_TESTS = [
+  ['uuid',     v => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)],
+  ['email',    v => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v)],
+  ['url',      v => /^https?:\/\/\S+$/i.test(v)],
+  ['json',     v => { const t=v.trim(); if(!(t[0]==='{'||t[0]==='[')) return false; try{JSON.parse(t);return true;}catch(e){return false;} }],
+  ['datetime', looksLikeDatetime],
+  ['date',     looksLikeDate],
+  ['boolean',  v => /^(true|false|yes|no|y|n)$/i.test(v.trim())],
+  ['integer',  v => /^-?\d+$/.test(v.trim())],
+  ['decimal',  v => /^-?\d+\.\d+$/.test(v.trim()) || /^-?\d+\.\d+e-?\d+$/i.test(v.trim())],
+  ['phone',    v => /^\+?[\d][\d\-\s().]{6,18}\d$/.test(v.trim()) && /[\-\s().]|^\+/.test(v.trim())],
+];
+const HEADER_HINTS = [
+  [/e-?mail/i,'email'], [/phone|tel(ephone)?|mobile|cell/i,'phone'],
+  [/url|website|link/i,'url'], [/^id$|_id$|uuid|guid/i,'uuid'],
+  [/date|_at$|^dob$|birthday/i,'date'],
+  [/price|amount|salary|cost|total|balance|rate|fee/i,'decimal'],
+  [/qty|quantity|count|stock|age|year|num|number|tot$/i,'integer'],
+  [/^is_|^has_|active|enabled|flag/i,'boolean'],
+  [/json|payload|meta|data$/i,'json'],
+];
+
+function inferType(values, header){
+  const sample = values.filter(v=>v!=null && String(v).trim()!=='').slice(0,60).map(String);
+  if(sample.length===0) return {type:'text', confidence:0, samples:[]};
+  const ratios = {};
+  for(const [t, test] of TYPE_TESTS){
+    ratios[t] = sample.filter(v=>{ try{return test(v.trim());}catch(e){return false;} }).length / sample.length;
+  }
+  // header hint nudges the relevant type up a bit, since "Phone" full of
+  // digits-only values would otherwise just look like plain integers
+  for(const [re, t] of HEADER_HINTS){
+    if(re.test(header) && ratios[t] !== undefined) ratios[t] = Math.min(1, ratios[t] + 0.25);
+  }
+  let best = 'text', bestScore = 0;
+  for(const [t] of TYPE_TESTS){
+    if(ratios[t] > bestScore){ bestScore = ratios[t]; best = t; }
+  }
+  if(bestScore < 0.5){ best = 'text'; bestScore = 1; } // fall back cleanly to text
+  const sizeFactor = sample.length < 5 ? 0.75 : 1;
+  const confidence = Math.round(Math.min(100, bestScore*100*sizeFactor));
+  const uniq = [...new Set(sample)];
+  return {type:best, confidence, samples: uniq.slice(0,4)};
 }
 
-/* ══════════════════════════════════════
-   FILE ENTRY
-══════════════════════════════════════ */
-function handleZoneClick(e){ if(e.target.closest('.browse-btn')||e.target.id==='fileInput') return; document.getElementById('fileInput').click(); }
-function handleDrop(e){ e.preventDefault(); e.currentTarget.classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f) processFile(f); }
-function handleFileSelect(e){ const f=e.target.files[0]; if(f) processFile(f); }
-document.addEventListener('dragover',e=>e.preventDefault());
-document.addEventListener('drop',e=>{ e.preventDefault(); if(document.getElementById('uploadZone').style.display!=='none'){ const f=e.dataTransfer.files[0]; if(f) processFile(f); } });
+/* ══════════════════════════════════════════════════════════════════
+   DATASET CLASSIFIER (heuristic — keyword overlap against known
+   shapes; falls back to "generic" when nothing scores meaningfully)
+══════════════════════════════════════════════════════════════════ */
+const DATASET_SIGNATURES = {
+  books:      {icon:'📚', kw:['isbn','book','title','author','publisher','subject','curriculum','grade','shelf','library']},
+  students:   {icon:'🎓', kw:['student','class','grade','gpa','enrollment','school','guardian','major']},
+  employees:  {icon:'🧑‍💼', kw:['employee','department','salary','hire','position','manager','staff','payroll']},
+  customers:  {icon:'🧾', kw:['customer','client','email','phone','address','company','contact']},
+  inventory:  {icon:'📦', kw:['sku','stock','warehouse','reorder','inventory','bin','location']},
+  products:   {icon:'🛒', kw:['product','price','sku','category','brand','stock','upc']},
+  orders:     {icon:'🧮', kw:['order','total','status','shipping','tracking','order_date','quantity']},
+  suppliers:  {icon:'🚚', kw:['supplier','vendor','lead_time','contact','po_number']},
+  schools:    {icon:'🏫', kw:['school','principal','enrollment','district','campus']},
+  medical:    {icon:'🩺', kw:['patient','diagnosis','doctor','medication','mrn','dob','prescription']},
+  finance:    {icon:'💰', kw:['account','transaction','invoice','currency','balance','ledger','tax']},
+};
+function classifyDataset(headers){
+  const norm = headers.map(h=>h.toLowerCase().replace(/[^a-z0-9]+/g,'_'));
+  const scores = {};
+  for(const [type, sig] of Object.entries(DATASET_SIGNATURES)){
+    let s = 0;
+    for(const kw of sig.kw) for(const h of norm) if(h.includes(kw)) s++;
+    scores[type] = s;
+  }
+  const ranked = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  const [topType, topScore] = ranked[0];
+  const runnerUpScore = ranked[1] ? ranked[1][1] : 0;
+  if(topScore === 0) return {type:'generic', confidence:0, icon:'📦', scores};
+  // a single ambiguous keyword shouldn't read as near-certain; confidence
+  // grows with how many distinct signals matched, and shrinks if a
+  // competing dataset type matched almost as many
+  let confidence = 25 + topScore*18 - runnerUpScore*10;
+  confidence = Math.max(30, Math.min(95, Math.round(confidence)));
+  return {type:topType, confidence, icon:DATASET_SIGNATURES[topType].icon, scores};
+}
 
-/* ══════════════════════════════════════
-   FORMAT DETECTION
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   IDENTIFIER SANITIZING
+══════════════════════════════════════════════════════════════════ */
+function sanitizeIdent(name, used){
+  let s = String(name).trim().toLowerCase()
+    .replace(/[^a-z0-9]+/g,'_')
+    .replace(/^_+|_+$/g,'')
+    .replace(/^(\d)/,'c_$1') || 'col';
+  s = s.slice(0,55);
+  if(!s) s = 'col';
+  let final = s, n = 2;
+  while(used.has(final)){ final = `${s}_${n++}`; }
+  used.add(final);
+  return final;
+}
+function suggestTableName(datasetType, headers){
+  if(datasetType && datasetType !== 'generic') return datasetType;
+  // fall back to a pluralized guess from the most "title-like" header,
+  // or just a timestamped generic name
+  return 'imported_data';
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FILE FORMAT / ENCODING DETECTION  (format-agnostic — unchanged in
+   spirit from before, since none of this was ever book-specific)
+══════════════════════════════════════════════════════════════════ */
 function detectFmt(bytes,text,name){
   if(bytes[0]===0x50&&bytes[1]===0x4B) return 'XLSX';
   const t=text.trimStart();
@@ -548,9 +767,21 @@ function detectEnc(bytes){
   return 'utf-8';
 }
 
-/* ══════════════════════════════════════
-   PARSERS
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   PARSERS — CSV / TSV / JSON / XML / XLSX / TXT
+   These already worked on arbitrary headers; the only change is
+   de-duplicating header names so two columns never collide and
+   silently overwrite each other.
+══════════════════════════════════════════════════════════════════ */
+function dedupeHeaders(headers){
+  const seen=new Map(); const out=[];
+  for(const raw of headers){
+    const h = (raw||'').toString().trim() || 'column';
+    const n = (seen.get(h)||0)+1; seen.set(h,n);
+    out.push(n===1?h:`${h}_${n}`);
+  }
+  return out;
+}
 function parseCSV(text,fmt){
   let d=',';
   if(fmt==='TSV') d='\t';
@@ -563,18 +794,18 @@ function parseCSV(text,fmt){
     if(m===tabs)d='\t';else if(m===semis)d=';';else if(m===pipes)d='|';else d=',';
   }
   const lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
-  if(lines.length<2) return [];
-  const headers=csvLine(lines[0],d);
+  if(lines.length<2) return {rows:[],headers:[]};
+  const headers=dedupeHeaders(csvLine(lines[0],d));
   const rows=[];
   for(let i=1;i<lines.length;i++){
     const ln=lines[i].trim(); if(!ln) continue;
     const vals=csvLine(ln,d);
     if(vals.every(v=>!v)) continue;
     const row={};
-    headers.forEach((h,idx)=>{ row[h||`col${idx}`]=(vals[idx]||'').trim(); });
+    headers.forEach((h,idx)=>{ row[h]=(vals[idx]||'').trim(); });
     rows.push(row);
   }
-  return rows;
+  return {rows,headers};
 }
 function csvLine(line,d){
   const r=[]; let c='',inQ=false;
@@ -588,12 +819,16 @@ function csvLine(line,d){
 }
 function parseJSON(text){
   let d; try{d=JSON.parse(text);}catch(e){throw new Error('Invalid JSON: '+e.message);}
-  if(Array.isArray(d)) return d.length&&typeof d[0]==='object'?d.map(flatObj):[];
-  if(typeof d==='object'){
-    for(const k of Object.keys(d)) if(Array.isArray(d[k])&&d[k].length&&typeof d[k][0]==='object') return d[k].map(flatObj);
-    return [flatObj(d)];
+  let rows = [];
+  if(Array.isArray(d)) rows = d.length&&typeof d[0]==='object'?d.map(flatObj):[];
+  else if(typeof d==='object'){
+    let found=false;
+    for(const k of Object.keys(d)) if(Array.isArray(d[k])&&d[k].length&&typeof d[k][0]==='object'){ rows=d[k].map(flatObj); found=true; break; }
+    if(!found) rows=[flatObj(d)];
   }
-  return [];
+  const headersSet=new Set(); rows.forEach(r=>Object.keys(r).forEach(k=>headersSet.add(k)));
+  const headers=dedupeHeaders([...headersSet]);
+  return {rows,headers};
 }
 function flatObj(o,p=''){
   const f={};
@@ -610,12 +845,14 @@ function parseXML(text){
   const childTags={};
   root.childNodes.forEach(n=>{ if(n.nodeType===1) childTags[n.tagName]=(childTags[n.tagName]||0)+1; });
   const recTag=Object.entries(childTags).sort((a,b)=>b[1]-a[1])[0];
-  if(!recTag) return [];
-  return Array.from(root.querySelectorAll(recTag[0])).map(rec=>{
+  if(!recTag) return {rows:[],headers:[]};
+  const rows = Array.from(root.querySelectorAll(recTag[0])).map(rec=>{
     const row={};
     rec.childNodes.forEach(n=>{ if(n.nodeType===1) row[n.tagName]=n.textContent.trim(); });
     return row;
   }).filter(r=>Object.keys(r).length>0);
+  const headersSet=new Set(); rows.forEach(r=>Object.keys(r).forEach(k=>headersSet.add(k)));
+  return {rows, headers: dedupeHeaders([...headersSet])};
 }
 async function parseXLSX(ab){
   const bytes=new Uint8Array(ab);
@@ -682,15 +919,17 @@ function parseSheet(xml,ss){
     });
     if(Object.keys(rObj).length>0) allRows.push(rObj);
   });
-  if(allRows.length<2) return [];
+  if(allRows.length<2) return {rows:[],headers:[]};
   const maxCol=Math.max(...allRows.map(r=>Math.max(...Object.keys(r).map(Number))));
-  const hdrs=[];
-  for(let c=0;c<=maxCol;c++) hdrs.push((allRows[0][c]||`col${c}`).trim());
-  return allRows.slice(1).map(rObj=>{
+  const rawHdrs=[];
+  for(let c=0;c<=maxCol;c++) rawHdrs.push((allRows[0][c]||`col${c}`).toString().trim());
+  const headers=dedupeHeaders(rawHdrs);
+  const rows = allRows.slice(1).map(rObj=>{
     const row={};
-    hdrs.forEach((h,i)=>{ row[h]=(rObj[i]||'').toString().trim(); });
+    headers.forEach((h,i)=>{ row[h]=(rObj[i]||'').toString().trim(); });
     return row;
-  }).filter(r=>hdrs.some(h=>r[h]));
+  }).filter(r=>headers.some(h=>r[h]));
+  return {rows,headers};
 }
 function colIdx(col){
   let n=0;
@@ -699,144 +938,194 @@ function colIdx(col){
 }
 function parseTXT(text){
   const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
-  if(lines.length<2) return [];
+  if(lines.length<2) return {rows:[],headers:[]};
   const sample=lines.slice(0,10).join('\n');
   const tabs=(sample.match(/\t/g)||[]).length,pipes=(sample.match(/\|/g)||[]).length,colons=(sample.match(/:/g)||[]).length;
   if(colons>lines.length*0.5){
-    const books=[]; let cur={};
+    const records=[]; let cur={};
     for(const line of lines){
-      if(!line){ if(Object.keys(cur).length>0){books.push(cur);cur={};} continue; }
+      if(!line){ if(Object.keys(cur).length>0){records.push(cur);cur={};} continue; }
       const[k,...rest]=line.split(':');
       if(rest.length>0) cur[k.trim()]=rest.join(':').trim();
     }
-    if(Object.keys(cur).length>0) books.push(cur);
-    if(books.length>0) return books;
+    if(Object.keys(cur).length>0) records.push(cur);
+    if(records.length>0){
+      const headersSet=new Set(); records.forEach(r=>Object.keys(r).forEach(k=>headersSet.add(k)));
+      return {rows:records, headers: dedupeHeaders([...headersSet])};
+    }
   }
   const d=tabs>pipes?'\t':'|';
-  const hdrs=lines[0].split(d).map(h=>h.trim());
-  return lines.slice(1).map(l=>{ const vals=l.split(d); const row={}; hdrs.forEach((h,i)=>{row[h]=(vals[i]||'').trim();}); return row; });
+  const headers=dedupeHeaders(lines[0].split(d).map(h=>h.trim()));
+  const rows = lines.slice(1).map(l=>{ const vals=l.split(d); const row={}; headers.forEach((h,i)=>{row[h]=(vals[i]||'').trim();}); return row; });
+  return {rows,headers};
 }
 
-/* ══════════════════════════════════════
-   SCHEMA INFERENCE
-══════════════════════════════════════ */
-function inferSchema(rows,headers){
-  const schema={};
-  const N=Math.min(rows.length,40);
-  for(const h of headers){
-    const vals=rows.slice(0,N).map(r=>(r[h]||'').toString().trim()).filter(Boolean);
-    const uniq=[...new Set(vals)];
-    const nullRate=1-(vals.length/N);
-    const avgLen=vals.reduce((a,v)=>a+v.length,0)/Math.max(vals.length,1);
-    let type='text';
-    const isIsbn=vals.filter(v=>/^[\d]{9,13}X?$/.test(v.replace(/[\-\s]/g,'')));
-    const isNum=vals.filter(v=>/^\d+(\.\d+)?$/.test(v));
-    if(isIsbn.length>vals.length*0.5) type='isbn';
-    else if(isNum.length>vals.length*0.8) type='numeric';
-    const isGrade=vals.filter(v=>/^[SPFs]\d+$/i.test(v.trim()));
-    if(isGrade.length>vals.length*0.5) type='grade';
-    const hn=h.toLowerCase().trim().replace(/[^a-z0-9 _]/g,'');
-    let mapsTo=null, conf=0;
-    for(const[field,aliases] of Object.entries(FIELD_MAP)){
-      for(const alias of aliases){
-        const an=alias.replace(/[^a-z0-9 _]/g,'');
-        if(hn===an){ const s=98; if(s>conf){mapsTo=field;conf=s;} }
-        else if(hn.includes(an)||an.includes(hn)){ const s=75; if(s>conf){mapsTo=field;conf=s;} }
-        else if(hn.replace(/_/g,' ')===an.replace(/_/g,' ')){ const s=95; if(s>conf){mapsTo=field;conf=s;} }
-      }
+/* ══════════════════════════════════════════════════════════════════
+   DYNAMIC SCHEMA BUILDER
+   Every header becomes exactly one column. None are ever dropped.
+══════════════════════════════════════════════════════════════════ */
+function buildSchema(rows, headers){
+  const used = new Set(['id','created_at','_import_batch','_raw']);
+  return headers.map(h=>{
+    const values = rows.map(r=>r[h]);
+    const inferred = inferType(values, h);
+    const name = sanitizeIdent(h, used);
+    const nonEmpty = values.filter(v=>v!=null && String(v).trim()!=='').length;
+    return {
+      source: h,
+      name,
+      type: inferred.type,
+      sqlType: SQL_TYPE[inferred.type],
+      confidence: inferred.confidence,
+      samples: inferred.samples,
+      completeness: rows.length ? Math.round((nonEmpty/rows.length)*100) : 0,
+      action: 'new',          // 'new' | 'match' | 'skip'  (skip = user choice only)
+      matchedExisting: null,
+      matchConfidence: 0,
+    };
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   COLUMN MATCHING ENGINE
+   Fuzzy-matches each discovered column against an existing table's
+   real columns, so re-importing into a table that already has
+   "product_name" correctly recognizes a file column called
+   "Product Name" instead of proposing a duplicate.
+══════════════════════════════════════════════════════════════════ */
+function tokenize(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().split(/\s+/).filter(Boolean); }
+function jaccard(a,b){
+  const A=new Set(a), B=new Set(b);
+  const inter=[...A].filter(x=>B.has(x)).length;
+  const union=new Set([...A,...B]).size;
+  return union ? inter/union : 0;
+}
+function matchColumns(columns, existingCols){
+  if(!existingCols || existingCols.length===0){
+    columns.forEach(c=>{ c.action='new'; c.matchedExisting=null; c.matchConfidence=0; });
+    return;
+  }
+  const existingNorm = existingCols
+    .filter(c=>!['id','created_at','_import_batch','_raw'].includes(c.column_name))
+    .map(c=>({ name:c.column_name, type:c.data_type, tokens: tokenize(c.column_name) }));
+  const claimed = new Set();
+  for(const col of columns){
+    const srcTokens = tokenize(col.source);
+    const normSrc = col.source.toLowerCase().replace(/[^a-z0-9]+/g,'');
+    let best=null, bestScore=0;
+    for(const ex of existingNorm){
+      if(claimed.has(ex.name)) continue;
+      const normEx = ex.name.replace(/[^a-z0-9]+/g,'');
+      let score = 0;
+      if(normSrc===normEx) score = 100;
+      else if(normEx.includes(normSrc)||normSrc.includes(normEx)) score = 80;
+      else score = Math.round(jaccard(srcTokens, ex.tokens)*100);
+      if(score>bestScore){ bestScore=score; best=ex; }
     }
-    if(type==='numeric'&&!mapsTo){mapsTo='tot';conf=70;}
-    if(type==='grade'&&!mapsTo){mapsTo='grade';conf=88;}
-    if(type==='isbn'&&!mapsTo){mapsTo='book_id';conf=85;}
-    const confLvl=conf>=85?'high':conf>=50?'medium':'low';
-    schema[h]={type,mapsTo,conf,confLvl,nullRate,samples:uniq.slice(0,5)};
-  }
-  // Deduplicate
-  const seen={};
-  for(const h of headers){
-    const s=schema[h];
-    if(s.mapsTo){
-      if(seen[s.mapsTo]&&seen[s.mapsTo].conf>=s.conf) s.mapsTo=null;
-      else if(seen[s.mapsTo]) seen[s.mapsTo].mapsTo=null;
-      if(s.mapsTo) seen[s.mapsTo]=s;
+    if(best && bestScore>=40){
+      col.action='match'; col.matchedExisting=best.name; col.matchConfidence=bestScore; col.name=best.name;
+      claimed.add(best.name);
+    } else {
+      col.action='new'; col.matchedExisting=null; col.matchConfidence=0;
     }
   }
-  return schema;
 }
 
-/* ══════════════════════════════════════
-   NORMALIZATION
-══════════════════════════════════════ */
-function normBook(row,schema,headers,existing){
-  const b={_status:'ok',_issues:[],_extra:{}};
-  for(const h of headers){
-    const s=schema[h];
-    const raw=(row[h]||'').toString().trim();
-    if(!s.mapsTo||s.mapsTo==='[Skipped]') continue;
-    if(s.mapsTo==='[Extra/Notes]'){b._extra[h]=raw;continue;}
-    b[s.mapsTo]=raw;
+/* ══════════════════════════════════════════════════════════════════
+   VALUE COERCION
+   If a value won't coerce cleanly to the column's type, the typed
+   column gets null and an issue is logged — but the ORIGINAL row is
+   always preserved verbatim in `_raw`, so nothing is ever actually
+   lost, even on a bad parse.
+══════════════════════════════════════════════════════════════════ */
+function coerceValue(raw, type){
+  const v = (raw==null) ? '' : String(raw).trim();
+  if(v==='') return {value:null, issue:null};
+  switch(type){
+    case 'integer': {
+      const n=parseInt(v,10);
+      return Number.isFinite(n) && /^-?\d+$/.test(v) ? {value:n, issue:null} : {value:null, issue:`"${v}" isn't a whole number`};
+    }
+    case 'decimal': {
+      const n=parseFloat(v);
+      return Number.isFinite(n) ? {value:n, issue:null} : {value:null, issue:`"${v}" isn't a number`};
+    }
+    case 'boolean': {
+      if(/^(true|yes|y|1)$/i.test(v)) return {value:true, issue:null};
+      if(/^(false|no|n|0)$/i.test(v)) return {value:false, issue:null};
+      return {value:null, issue:`"${v}" isn't a recognizable boolean`};
+    }
+    case 'date': {
+      const d=new Date(v); 
+      if(isNaN(d.getTime())) return {value:null, issue:`"${v}" isn't a recognizable date`};
+      return {value:d.toISOString().slice(0,10), issue:null};
+    }
+    case 'datetime': {
+      const d=new Date(v);
+      if(isNaN(d.getTime())) return {value:null, issue:`"${v}" isn't a recognizable timestamp`};
+      return {value:d.toISOString(), issue:null};
+    }
+    case 'json': {
+      try{ return {value:JSON.parse(v), issue:null}; }catch(e){ return {value:null, issue:`"${v.slice(0,24)}…" isn't valid JSON`}; }
+    }
+    case 'uuid': {
+      return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)
+        ? {value:v.toLowerCase(), issue:null} : {value:null, issue:`"${v}" isn't a valid UUID`};
+    }
+    default: // text, email, phone, url
+      return {value:v, issue:null};
   }
-  // book_id
-  if(!b.book_id||!b.book_id.trim()){
-    b.book_id='BK'+String(idCtr++).padStart(4,'0');
-  } else {
-    b.book_id=b.book_id.toString().replace(/\s/g,'');
-  }
-  // book_category
-  if(!b.book_category||!b.book_category.trim()){
-    b.book_category='Student';
-    b._issues.push('Category defaulted to Student');
-    if(b._status==='ok') b._status='warn';
-  } else b.book_category=b.book_category.trim();
-  // curriculum
-  if(!b.curriculum||!b.curriculum.trim()){
-    b.curriculum='';
-    b._issues.push('Missing curriculum');
-    if(b._status==='ok') b._status='warn';
-  } else b.curriculum=b.curriculum.trim();
-  // subject (required)
-  if(!b.subject||!b.subject.trim()){
-    b._status='error'; b._issues.push('Missing subject (required)');
-    b.subject='(No Subject)';
-  } else b.subject=b.subject.trim().replace(/\s+/g,' ');
-  // book_publisher
-  b.book_publisher=(b.book_publisher||'').trim()||'';
-  // grade
-  b.grade=(b.grade||'').trim().toUpperCase();
-  // tot
-  let tot=parseInt(b.tot)||0;
-  if(tot<=0){ if(b.tot&&b.tot!=='') b._issues.push('Invalid quantity → defaulted to 1'); tot=1; if(b._status==='ok') b._status='warn'; }
-  b.tot=tot;
-  return b;
 }
 
-/* ══════════════════════════════════════
-   QUALITY REPORT
-══════════════════════════════════════ */
-function buildQR(books){
-  const subjects=books.map(b=>b.subject.toLowerCase());
-  const dups=subjects.filter((s,i)=>s!=='(no subject)'&&subjects.indexOf(s)!==i);
-  return {
-    total:books.length,
-    ok:books.filter(b=>b._status==='ok').length,
-    warn:books.filter(b=>b._status==='warn').length,
-    err:books.filter(b=>b._status==='error').length,
-    dups:dups.length,
-    fixed:books.filter(b=>b._issues.length>0).length,
-    noPublisher:books.filter(b=>!b.book_publisher).length,
-    noCurric:books.filter(b=>!b.curriculum).length,
-  };
+/* ══════════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════════ */
+let udm = null;        // the whole universal data model for this session
+let filtRows = [];      // currently filtered/sorted view of udm.records
+let selAll = false;
+const ROW_H = 40, BUF = 18;
+let sortK=null, sortD=1;
+
+/* ══════════════════════════════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════════════════════════════ */
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function yld(){ return new Promise(r=>setTimeout(r,0)); }
+function toast(msg, type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast on '+(type?type+'-toast':'');
+  setTimeout(()=>t.className='toast',3500);
+}
+function setPill(txt,cls=''){
+  const p=document.getElementById('statusPill');
+  p.className='status-pill '+(cls||'');
+  document.getElementById('statusTxt').textContent=txt;
+}
+function uuidv4(){
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c=>{
+    const r=Math.random()*16|0, v=c==='x'?r:(r&0x3|0x8); return v.toString(16);
+  });
 }
 
-/* ══════════════════════════════════════
-   CHAT UI
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   FILE ENTRY
+══════════════════════════════════════════════════════════════════ */
+function handleZoneClick(e){ if(e.target.closest('.browse-btn')||e.target.id==='fileInput') return; document.getElementById('fileInput').click(); }
+function handleDrop(e){ e.preventDefault(); e.currentTarget.classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f) processFile(f); }
+function handleFileSelect(e){ const f=e.target.files[0]; if(f) processFile(f); }
+document.addEventListener('dragover',e=>e.preventDefault());
+document.addEventListener('drop',e=>{ e.preventDefault(); if(document.getElementById('uploadZone').style.display!=='none'){ const f=e.dataTransfer.files[0]; if(f) processFile(f); } });
+
+/* ══════════════════════════════════════════════════════════════════
+   CHAT UI  (unchanged mechanic — narrates whatever the engine found)
+══════════════════════════════════════════════════════════════════ */
 function clearChat(){ document.getElementById('chatWin').innerHTML=''; }
 function setBotStat(txt){ document.getElementById('botStat').innerHTML=`<div class="status-pulse" style="color:var(--orange)"></div><span>${txt}</span>`; }
 async function botMsg(html,delay=0,cls=''){
   if(delay>0) await wait(delay);
   const win=document.getElementById('chatWin');
-  const tid='t'+Date.now();
+  const tid='t'+Date.now()+Math.random();
   const tel=document.createElement('div');
   tel.id=tid; tel.className='msg typing';
   tel.innerHTML=`<div class="m-ava">🤖</div><div class="m-body"><div class="m-text"><div class="dots"><span></span><span></span><span></span></div></div></div>`;
@@ -865,7 +1154,7 @@ function addCbtns(labels,handlers){
 }
 function addProg(){
   const win=document.getElementById('chatWin');
-  const id='p'+Date.now();
+  const id='p'+Date.now()+Math.round(Math.random()*1000);
   const el=document.createElement('div'); el.style.marginLeft='38px'; el.id=id;
   el.innerHTML=`<div class="prog-wrap"><div class="prog-fill" id="${id}f" style="width:0%"></div></div><div class="prog-lbl" id="${id}l">0%</div>`;
   win.appendChild(el); win.scrollTop=win.scrollHeight;
@@ -876,17 +1165,17 @@ function updProg(id,pct){
   if(f) f.style.width=pct+'%'; if(l) l.textContent=pct+'%';
 }
 
-/* ══════════════════════════════════════
-   MAIN PROCESS
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   MAIN PROCESS — parse → classify → infer schema → render
+══════════════════════════════════════════════════════════════════ */
 async function processFile(file){
-  if(file.size>100*1024*1024){ toast('❌ File >100MB. Please split.','err'); return; }
+  if(file.size>150*1024*1024){ toast('❌ File >150MB. Please split it first.','err'); return; }
   document.getElementById('uploadZone').style.display='none';
   document.getElementById('botPanel').className='bot-panel on';
   document.getElementById('startOverBtn').style.display='block';
   setPill('Analysing...','active');
   setBotStat('Reading file...');
-  clearChat(); idCtr=1;
+  clearChat();
   const t0=Date.now();
   const ab=await file.arrayBuffer();
   const bytes=new Uint8Array(ab);
@@ -897,161 +1186,290 @@ async function processFile(file){
   const fmt=detectFmt(bytes,text,file.name);
   const sizeFmt=file.size>1024*1024?(file.size/1024/1024).toFixed(1)+'MB':Math.round(file.size/1024)+'KB';
   await botMsg(`📂 File received: <code>${esc(file.name)}</code> (${sizeFmt})`);
-  await wait(300);
-  await botMsg(`🔍 Format: <code>${fmt}</code> · Encoding: <code>${enc.toUpperCase()}</code>`);
   await wait(250);
-  let rows=[], parseErr=null;
+  await botMsg(`🔍 Format: <code>${fmt}</code> · Encoding: <code>${enc.toUpperCase()}</code>`);
+  await wait(200);
+  let parsed=null, parseErr=null;
   try{
-    if(fmt==='XLSX') rows=await parseXLSX(ab);
-    else if(fmt==='JSON') rows=parseJSON(text);
-    else if(fmt==='XML') rows=parseXML(text);
-    else if(['CSV','TSV','CSV_SEMI','CSV_PIPE'].includes(fmt)) rows=parseCSV(text,fmt);
-    else rows=parseTXT(text);
+    if(fmt==='XLSX') parsed=await parseXLSX(ab);
+    else if(fmt==='JSON') parsed=parseJSON(text);
+    else if(fmt==='XML') parsed=parseXML(text);
+    else if(['CSV','TSV','CSV_SEMI','CSV_PIPE'].includes(fmt)) parsed=parseCSV(text,fmt);
+    else parsed=parseTXT(text);
   }catch(e){ parseErr=e.message; }
-  if(parseErr||!rows||rows.length===0){
-    await botMsg(`❌ Could not parse. ${parseErr||'No data rows found.'}<br>Try saving as CSV from Excel.`,'','err');
+  if(parseErr || !parsed || !parsed.rows || parsed.rows.length===0){
+    await botMsg(`❌ Could not parse this file. ${parseErr||'No data rows found.'}<br>If it's an unusual export, try saving as plain CSV and re-uploading.`,'','err');
     addCbtns(['↺ Try Again'],[startOver]);
     setPill('Parse Error'); setBotStat('Error'); return;
   }
-  const headers=Object.keys(rows[0]||{});
+  const {rows, headers} = parsed;
   await botMsg(`📊 Structure: <b>TABULAR</b> · <b>${headers.length}</b> columns · <b>${rows.length}</b> rows`);
-  await wait(300);
-  await botMsg(`🧠 Columns: ${headers.map(h=>`<code>${esc(h)}</code>`).join(' · ')}`);
-  await wait(400);
-  const schema=inferSchema(rows,headers);
-  const overallConf=Math.round(Object.values(schema).reduce((a,s)=>a+s.conf,0)/Math.max(Object.keys(schema).length,1));
-  await botMsg(`🔗 Mapping to ScholarLib fields — confidence: <b>${overallConf}%</b>`);
-  showMapping(schema,headers);
-  const uncertain=headers.filter(h=>schema[h].mapsTo&&schema[h].conf<85&&schema[h].conf>0);
-  if(uncertain.length>0){
-    const h=uncertain[0], s=schema[h];
-    await botMsg(`⚠️ I mapped <code>${esc(h)}</code> → <b>${s.mapsTo}</b> at <b>${s.conf}%</b>.\nSamples: ${s.samples.slice(0,3).map(v=>`"${esc(v)}"`).join(', ')}. OK?`,'','warn');
-    addCbtns(['✅ Yes, keep','Adjust manually','Skip this column'],[
-      ()=>{ userMsg('Yes, keep it'); continueProc(file,rows,schema,headers,t0); },
-      ()=>{ userMsg('I\'ll adjust manually'); continueProc(file,rows,schema,headers,t0); },
-      ()=>{ schema[h].mapsTo=null; userMsg('Skip that column'); continueProc(file,rows,schema,headers,t0); }
-    ]);
-  } else {
-    await continueProc(file,rows,schema,headers,t0);
-  }
-}
-
-async function continueProc(file,rows,schema,headers,t0){
   await wait(250);
-  await botMsg(`⚙️ Extracting and normalizing <b>${rows.length}</b> records...`);
-  const pid=addProg();
-  const books=[];
-  const chk=Math.min(400,Math.max(50,Math.floor(rows.length/10)));
-  for(let i=0;i<rows.length;i+=chk){
-    for(const row of rows.slice(i,i+chk)) books.push(normBook(row,schema,headers,books));
-    updProg(pid,Math.round(((i+chk)/rows.length)*100));
-    await yld();
-  }
-  updProg(pid,100);
-  const parseMs=Date.now()-t0;
-  const qr=buildQR(books);
-  const conf=Math.round(Object.values(schema).reduce((a,s)=>a+s.conf,0)/Math.max(Object.keys(schema).length,1));
-  udm={metadata:{fileName:file.name,fileSize:file.size,fmt:file.name.split('.').pop().toUpperCase(),parseMs,rows:rows.length,cols:headers.length,conf},schema,books,qr};
-  filtRows=[...books];
-  const ready=books.filter(b=>b._status!=='error').length;
-  const warns=books.filter(b=>b._status==='warn').length;
-  const errs=books.filter(b=>b._status==='error').length;
-  if(errs===0&&warns===0) await botMsg(`✅ <b>Perfect!</b> All ${ready} records extracted cleanly.`,'','ok');
-  else await botMsg(`✅ Done! <b>${ready}</b> ready · <b>${warns}</b> auto-fixed · <b>${errs}</b> skipped (missing subject).`,'','ok');
-  await botMsg(`📋 Preview below — double-click any cell to edit. Click <b>Import to ScholarLib DB</b> when ready.`);
-  setBotStat('Complete ✓'); setPill('Ready to Import','done');
-  document.getElementById('statsBar').style.display='grid';
-  document.getElementById('st-total').textContent=books.length;
-  document.getElementById('st-ok').textContent=qr.ok;
-  document.getElementById('st-warn').textContent=qr.warn;
-  document.getElementById('st-err').textContent=qr.err;
-  document.getElementById('st-time').textContent=parseMs+'ms';
-  document.getElementById('st-conf').textContent=conf+'%';
-  showMapping(schema,headers);
-  showPreview(books);
-  showQualReport(qr);
-  document.getElementById('actBar').className='act-bar on';
-  updActBar();
+  await botMsg(`🧠 Columns found: ${headers.map(h=>`<code>${esc(h)}</code>`).join(' · ')}`);
+  await wait(300);
+
+  const dataset = classifyDataset(headers);
+  await botMsg(dataset.type==='generic'
+    ? `🧬 This doesn't match a dataset shape I recognize strongly — treating it as <b>generic</b> data. Every column will still be imported.`
+    : `🧬 This looks like a <b>${dataset.type}</b> dataset (${dataset.confidence}% confidence) based on the column names.`);
+
+  const columns = buildSchema(rows, headers);
+  const avgConf = Math.round(columns.reduce((a,c)=>a+c.confidence,0)/Math.max(columns.length,1));
+  await botMsg(`🔗 Inferred a type for every column — average type-detection confidence: <b>${avgConf}%</b>`);
+
+  const parseMs = Date.now()-t0;
+  udm = {
+    metadata:{fileName:file.name, fileSize:file.size, fmt, parseMs, rowCount:rows.length, colCount:headers.length, avgConf},
+    dataset, rawRows: rows, columns,
+    tableName: suggestTableName(dataset.type, headers),
+    tableExists: null, existingColumns: null,
+    records: [], qr: null,
+    importBatch: uuidv4(),
+  };
+
+  showDatasetSection();
+  showMapping();
+  setBotStat('Awaiting DB check'); setPill('Ready to map','active');
+  await botMsg(`📋 Suggested table: <code>${esc(udm.tableName)}</code>. Adjust it if you'd rather use a different name, then click <b>Check Database</b> so I can see whether it already exists.`);
 }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
+   DATASET / TABLE NAME UI
+══════════════════════════════════════════════════════════════════ */
+function showDatasetSection(){
+  document.getElementById('datasetSection').style.display='block';
+  document.getElementById('datasetIcon').textContent = udm.dataset.icon;
+  document.getElementById('datasetType').textContent = udm.dataset.type;
+  document.getElementById('datasetConf').textContent = udm.dataset.confidence>0 ? `${udm.dataset.confidence}% confidence` : 'low confidence';
+  document.getElementById('datasetSub').textContent = `${udm.metadata.colCount} columns · ${udm.metadata.rowCount} rows · parsed in ${udm.metadata.parseMs}ms`;
+  document.getElementById('tableNameInput').value = udm.tableName;
+  document.getElementById('tableCheckBanner').className='conn-banner';
+}
+function onTableNameEdit(){
+  const used=new Set();
+  udm.tableName = sanitizeIdent(document.getElementById('tableNameInput').value || 'imported_data', used);
+  udm.tableExists=null; udm.existingColumns=null;
+  document.getElementById('tableCheckBanner').className='conn-banner';
+}
+
+async function checkDatabase(){
+  const banner=document.getElementById('tableCheckBanner');
+  banner.className='conn-banner testing show';
+  banner.innerHTML=`<div class="status-pulse"></div><span>Checking whether <code>${esc(udm.tableName)}</code> exists…</span>`;
+  try{
+    const exists = await sbRpc('import_engine_table_exists', {p_table: udm.tableName});
+    udm.tableExists = exists;
+    if(exists){
+      const cols = await sbRpc('import_engine_get_columns', {p_table: udm.tableName});
+      udm.existingColumns = cols;
+      matchColumns(udm.columns, cols);
+      banner.className='conn-banner ok show';
+      banner.innerHTML=`<span>✓ <code>${esc(udm.tableName)}</code> exists with ${cols.length} columns — matching your file's columns against it now.</span>`;
+      await botMsg(`✅ Table <code>${esc(udm.tableName)}</code> already exists (${cols.length} columns). I matched your file's columns against it below — anything unmatched will be added as a new column.`,0,'ok');
+    } else {
+      matchColumns(udm.columns, null);
+      banner.className='conn-banner ok show';
+      banner.innerHTML=`<span>＋ <code>${esc(udm.tableName)}</code> doesn't exist yet — it'll be created with all ${udm.columns.length} columns.</span>`;
+      await botMsg(`＋ No table called <code>${esc(udm.tableName)}</code> yet — I'll create it fresh with all ${udm.columns.length} discovered columns.`);
+    }
+  }catch(e){
+    udm.tableExists=null;
+    banner.className='conn-banner fail show';
+    banner.innerHTML=`<span>✗ Couldn't check: ${esc(e.message)}</span>`;
+    toast('❌ '+e.message,'err');
+  }
+  showMapping();
+  showDdlPreview();
+  await finalizeNormalization();
+}
+
+/* ══════════════════════════════════════════════════════════════════
    MAPPING UI
-══════════════════════════════════════ */
-function showMapping(schema,headers){
+══════════════════════════════════════════════════════════════════ */
+function showMapping(){
   document.getElementById('mapSection').style.display='block';
-  const oc=Math.round(Object.values(schema).reduce((a,s)=>a+s.conf,0)/Math.max(Object.keys(schema).length,1));
-  document.getElementById('mapConf').textContent=`${oc}% avg confidence`;
   const tbody=document.getElementById('mapBody'); tbody.innerHTML='';
-  for(const h of headers){
-    const s=schema[h];
-    const cc=s.conf>=85?'c-hi':s.conf>=50?'c-md':s.conf>0?'c-lo':'c-na';
-    const samples=s.samples.slice(0,3).map(v=>esc(String(v).slice(0,18))).join(', ')||'—';
-    const typeClr=s.type==='numeric'?'var(--blue)':s.type==='grade'?'var(--orange)':s.type==='isbn'?'var(--green)':'var(--text3)';
+  const counts={match:0,new:0,skip:0,review:0};
+  for(const col of udm.columns){
+    const cc = col.action==='match' ? (col.matchConfidence>=70?'c-hi':col.matchConfidence>=40?'c-md':'c-lo')
+             : col.confidence>=85?'c-hi':col.confidence>=50?'c-md':col.confidence>0?'c-lo':'c-na';
+    const confVal = col.action==='match' ? col.matchConfidence : col.confidence;
+    const needsReview = col.action==='match' && col.matchConfidence<70;
+    if(needsReview) counts.review++; else counts[col.action===''?'skip':col.action]++;
+    const samples = col.samples.slice(0,3).map(v=>esc(String(v).slice(0,18))).join(', ')||'—';
+    const typeClr = {integer:'var(--blue)',decimal:'var(--blue)',boolean:'var(--purple)',date:'var(--orange)',datetime:'var(--orange)',uuid:'var(--green)',email:'var(--green)',url:'var(--green)',json:'var(--purple)'}[col.type]||'var(--text3)';
+
+    const options = [];
+    options.push(`<option value="__new__"${col.action==='new'?' selected':''}>+ Create new: ${esc(col.name)}</option>`);
+    if(udm.existingColumns){
+      for(const ec of udm.existingColumns){
+        if(['id','created_at','_import_batch','_raw'].includes(ec.column_name)) continue;
+        options.push(`<option value="${esc(ec.column_name)}"${col.action==='match'&&col.matchedExisting===ec.column_name?' selected':''}>↳ ${esc(ec.column_name)}</option>`);
+      }
+    }
+    options.push(`<option value="__skip__"${col.action==='skip'?' selected':''}>✕ Skip this column</option>`);
+
+    const badge = col.action==='skip' ? `<span class="action-badge action-skip">SKIP</span>`
+      : needsReview ? `<span class="action-badge action-review">REVIEW</span>`
+      : col.action==='match' ? `<span class="action-badge action-match">MATCH</span>`
+      : `<span class="action-badge action-new">NEW</span>`;
+
     const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td><span class="src-tag">${esc(h)}</span></td>
+      <td><span class="src-tag">${esc(col.source)}</span></td>
       <td class="arrow-cell">→</td>
-      <td><select class="map-sel" data-col="${esc(h)}" onchange="updateMap(this)">${ALL_FIELDS.map(f=>`<option value="${f}"${f===s.mapsTo?' selected':''}>${f}</option>`).join('')}<option value=""${!s.mapsTo?' selected':''}>— skip</option></select></td>
-      <td><div class="c-bar-wrap"><div class="c-bar"><div class="c-fill ${cc}" style="width:${s.conf}%"></div></div><span class="c-pct">${s.conf>0?s.conf+'%':'N/A'}</span></div></td>
-      <td><span style="font-family:var(--mono);font-size:11px;color:${typeClr}">${s.type}</span></td>
+      <td><select class="map-sel" data-col="${esc(col.source)}" onchange="updateMap(this)">${options.join('')}</select></td>
+      <td><div class="c-bar-wrap"><div class="c-bar"><div class="c-fill ${cc}" style="width:${confVal}%"></div></div><span class="c-pct">${confVal>0?confVal+'%':'—'}</span></div></td>
+      <td><span style="font-family:var(--mono);font-size:11px;color:${typeClr}">${col.type}</span></td>
       <td style="color:var(--text3);font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${samples}</td>
+      <td>${badge}</td>
     `;
     tbody.appendChild(tr);
   }
+  const setChip=(id,n,label)=>{ const el=document.getElementById(id); if(n>0){el.style.display='';el.textContent=`${n} ${label}`;} else el.style.display='none'; };
+  setChip('mapMatch',counts.match,'matched');
+  setChip('mapNew',counts.new,'new');
+  setChip('mapReview',counts.review,'need review');
+  setChip('mapSkip',counts.skip,'skipped');
 }
 function updateMap(sel){
-  if(!udm) return;
-  udm.schema[sel.dataset.col].mapsTo=sel.value||null;
-  toast(`✅ Remapped "${sel.dataset.col}" → ${sel.value||'(skipped)'}`);
+  const col = udm.columns.find(c=>c.source===sel.dataset.col);
+  if(!col) return;
+  const used = new Set(udm.columns.filter(c=>c!==col).map(c=>c.name));
+  if(sel.value==='__new__'){
+    col.action='new'; col.matchedExisting=null; col.matchConfidence=0;
+    col.name = sanitizeIdent(col.source, used);
+  } else if(sel.value==='__skip__'){
+    col.action='skip'; col.matchedExisting=null; col.matchConfidence=100;
+  } else {
+    col.action='match'; col.matchedExisting=sel.value; col.matchConfidence=100; col.name=sel.value;
+  }
+  showMapping(); showDdlPreview();
+  finalizeNormalization();
+  toast(`Remapped "${col.source}"`);
 }
 
-/* ══════════════════════════════════════
-   VIRTUAL TABLE
-══════════════════════════════════════ */
-const COLS=[
-  {k:'_cb',lbl:'',w:'42px'},
-  {k:'_no',lbl:'#',w:'50px'},
-  {k:'_st',lbl:'Status',w:'70px'},
-  {k:'book_id',lbl:'Book ID',w:'85px'},
-  {k:'book_category',lbl:'Category',w:'100px'},
-  {k:'curriculum',lbl:'Curriculum',w:'150px'},
-  {k:'subject',lbl:'Subject',w:'170px'},
-  {k:'book_publisher',lbl:'Publisher',w:'130px'},
-  {k:'grade',lbl:'Grade',w:'70px'},
-  {k:'tot',lbl:'Tot',w:'55px'},
-  {k:'_iss',lbl:'Issues',w:'170px'},
-];
-const GTPL=COLS.map(c=>c.w).join(' ');
-let sortK=null,sortD=1;
+/* ══════════════════════════════════════════════════════════════════
+   DDL PREVIEW
+══════════════════════════════════════════════════════════════════ */
+function highlightSQL(sql){
+  return esc(sql).replace(/\b(CREATE TABLE|ALTER TABLE|ADD COLUMN|IF NOT EXISTS|PRIMARY KEY|NOT NULL|DEFAULT)\b/g,'<span class="kw">$1</span>');
+}
+function planDDL(){
+  const newCols = udm.columns.filter(c=>c.action==='new');
+  const stmts=[];
+  if(udm.tableExists===false){
+    const colLines = newCols.map(c=>`  ${c.name.padEnd(24)} ${c.sqlType}`).join(',\n');
+    stmts.push(`-- new table\nCREATE TABLE public.${udm.tableName} (\n  id            bigint  PRIMARY KEY GENERATED ALWAYS AS IDENTITY,\n  created_at    timestamptz NOT NULL DEFAULT now(),\n  _import_batch text,\n  _raw          jsonb${colLines?',\n'+colLines:''}\n);`);
+  } else if(udm.tableExists===true && newCols.length>0){
+    stmts.push(`-- adding ${newCols.length} missing column${newCols.length>1?'s':''} to public.${udm.tableName}`);
+    newCols.forEach(c=> stmts.push(`ALTER TABLE public.${udm.tableName} ADD COLUMN IF NOT EXISTS ${c.name} ${c.sqlType};`));
+  } else if(udm.tableExists===true){
+    stmts.push(`-- public.${udm.tableName} already has every column this file needs. No schema changes required.`);
+  } else {
+    stmts.push(`-- click "Check Database" above to see what will change`);
+  }
+  return stmts.join('\n\n');
+}
+function showDdlPreview(){
+  document.getElementById('ddlSection').style.display='block';
+  document.getElementById('ddlBox').innerHTML = highlightSQL(planDDL());
+  const newCount = udm.columns.filter(c=>c.action==='new').length;
+  document.getElementById('ddlChip').textContent = udm.tableExists===false ? 'creates 1 table' : newCount>0 ? `adds ${newCount} column${newCount>1?'s':''}` : 'no changes needed';
+}
 
-function showPreview(books){
+/* ══════════════════════════════════════════════════════════════════
+   NORMALIZATION — turns raw rows into typed records per the current
+   mapping. Re-run any time the mapping changes.
+══════════════════════════════════════════════════════════════════ */
+async function finalizeNormalization(){
+  await wait(50);
+  const active = udm.columns.filter(c=>c.action!=='skip');
+  const records=[];
+  const rowHashes=new Map();
+  let dupCount=0;
+  for(let i=0;i<udm.rawRows.length;i++){
+    const raw = udm.rawRows[i];
+    const rec = {_status:'ok', _issues:[], _rowIndex:i+1};
+    for(const col of active){
+      const {value, issue} = coerceValue(raw[col.source], col.type);
+      rec[col.name]=value;
+      if(issue){ rec._issues.push(`${col.source}: ${issue}`); if(rec._status==='ok') rec._status='warn'; }
+    }
+    if(active.length>0 && active.every(col=>rec[col.name]===null||rec[col.name]==='')){
+      rec._status='error'; rec._issues.push('Row is entirely empty across mapped columns');
+    }
+    const hash = JSON.stringify(active.map(c=>rec[c.name]));
+    if(rowHashes.has(hash)){ dupCount++; rec._dup=true; if(rec._status==='ok') rec._status='warn'; rec._issues.push('Looks like a duplicate of row '+rowHashes.get(hash)); }
+    else rowHashes.set(hash, i+1);
+    records.push(rec);
+  }
+  udm.records = records;
+  udm.qr = buildQR(records, dupCount);
+  filtRows=[...records];
+  renderAfterNormalize();
+}
+function buildQR(records, dupCount){
+  const ok=records.filter(r=>r._status==='ok').length;
+  const warn=records.filter(r=>r._status==='warn').length;
+  const err=records.filter(r=>r._status==='error').length;
+  const completeness = Math.round(udm.columns.filter(c=>c.action!=='skip').reduce((a,c)=>a+c.completeness,0)/Math.max(udm.columns.filter(c=>c.action!=='skip').length,1));
+  return {total:records.length, ok, warn, err, dupCount, fixed:records.filter(r=>r._issues.length>0).length, completeness};
+}
+
+function renderAfterNormalize(){
+  document.getElementById('statsBar').style.display='grid';
+  document.getElementById('st-total').textContent=udm.records.length;
+  document.getElementById('st-ok').textContent=udm.qr.ok;
+  document.getElementById('st-warn').textContent=udm.qr.warn;
+  document.getElementById('st-err').textContent=udm.qr.err;
+  document.getElementById('st-time').textContent=udm.metadata.parseMs+'ms';
+  document.getElementById('st-cols').textContent=udm.columns.filter(c=>c.action!=='skip').length+'/'+udm.columns.length;
+  showPreview();
+  showQualReport();
+  document.getElementById('actBar').className='act-bar on';
+  updActBar();
+  setBotStat('Complete ✓'); setPill('Ready to Import','done');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   VIRTUAL TABLE — columns are built dynamically from udm.columns,
+   never a fixed book-shaped list.
+══════════════════════════════════════════════════════════════════ */
+function activeCols(){ return udm.columns.filter(c=>c.action!=='skip'); }
+function tblColDefs(){
+  return [
+    {k:'_cb', lbl:'', w:42},
+    {k:'_no', lbl:'#', w:50},
+    {k:'_st', lbl:'Status', w:70},
+    ...activeCols().map(c=>({k:c.name, lbl:c.name, w:Math.max(90,Math.min(220,c.name.length*9+50))})),
+    {k:'_iss', lbl:'Issues', w:200},
+  ];
+}
+function showPreview(){
   document.getElementById('prevSection').style.display='block';
-  filtRows=[...books];
-  const cats=[...new Set(books.map(b=>b.book_category))].sort();
-  const grades=[...new Set(books.map(b=>b.grade))].filter(Boolean).sort();
-  const cs=document.getElementById('catFlt');
-  cats.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; cs.appendChild(o); });
-  const gs=document.getElementById('gradeFlt');
-  grades.forEach(g=>{ const o=document.createElement('option'); o.value=g; o.textContent=g; gs.appendChild(o); });
+  filtRows=[...udm.records];
+  const defs = tblColDefs();
   const head=document.getElementById('virtHead');
-  head.style.gridTemplateColumns=GTPL;
-  head.innerHTML=COLS.map(c=>c.k==='_cb'?`<div class="th"><input type="checkbox" id="selAllCb" class="row-cb" onchange="selAllCb(this)"></div>`:`<div class="th" onclick="sortBy('${c.k}')">${c.lbl}<span id="si_${c.k}"></span></div>`).join('');
-  updCounts(books);
+  head.innerHTML = defs.map(c=>{
+    const style=`width:${c.w}px`;
+    if(c.k==='_cb') return `<div class="th" style="${style}"><input type="checkbox" id="selAllCb" class="row-cb" onchange="selAllCb(this)"></div>`;
+    return `<div class="th" style="${style}" onclick="sortBy('${c.k}')">${esc(c.lbl)}<span id="si_${c.k}"></span></div>`;
+  }).join('');
+  updCounts();
   renderVirt();
 }
-function updCounts(books){
-  const ready=books.filter(b=>b._status!=='error').length;
-  const warn=books.filter(b=>b._status==='warn').length;
-  const err=books.filter(b=>b._status==='error').length;
-  document.getElementById('prevCount').textContent=`${ready} ready`;
-  const wc=document.getElementById('warnChip');
-  const ec=document.getElementById('errChip');
-  if(warn>0){wc.textContent=`${warn} warnings`;wc.style.display='';}else wc.style.display='none';
-  if(err>0){ec.textContent=`${err} skipped`;ec.style.display='';}else ec.style.display='none';
+function updCounts(){
+  const records=udm.records;
+  document.getElementById('prevCount').textContent=`${udm.qr.ok} ready`;
+  const wc=document.getElementById('warnChip'), ec=document.getElementById('errChip');
+  if(udm.qr.warn>0){wc.textContent=`${udm.qr.warn} warnings`;wc.style.display='';}else wc.style.display='none';
+  if(udm.qr.err>0){ec.textContent=`${udm.qr.err} skipped`;ec.style.display='';}else ec.style.display='none';
   document.getElementById('visCount').textContent=filtRows.length;
-  document.getElementById('totCount').textContent=udm?.books?.length||0;
+  document.getElementById('totCount').textContent=records.length;
 }
 function renderVirt(){
+  if(!udm) return;
   const sc=document.getElementById('virtScroll');
   const rw=document.getElementById('rowsWrap');
   const st=document.getElementById('spTop');
@@ -1064,43 +1482,45 @@ function renderVirt(){
   st.style.height=(vStart*ROW_H)+'px';
   sb.style.height=((total-vEnd)*ROW_H)+'px';
   rw.innerHTML='';
+  const defs=tblColDefs();
   for(let i=vStart;i<vEnd;i++){
-    const b=filtRows[i]; if(!b) continue;
+    const r=filtRows[i]; if(!r) continue;
+    const iss=(r._issues||[]).join('; ')||'—';
     const row=document.createElement('div');
-    row.className=`virt-row ${b._status}${b._sel?' sel':''}`;
-    row.style.gridTemplateColumns=GTPL;
-    const iss=(b._issues||[]).join('; ')||'—';
-    row.innerHTML=`
-      <div class="td"><input type="checkbox" class="row-cb"${b._sel?' checked':''} onchange="toggleRow(${i},this)"></div>
-      <div class="td" style="color:var(--text3);font-family:var(--mono);font-size:10px">${i+1}</div>
-      <div class="td">${b._status==='ok'?'<div class="s-ok"></div>':b._status==='warn'?'<div class="s-wn"></div>':'<div class="s-er"></div>'}</div>
-      <div class="td t-or" ondblclick="editTd(this,${i},'book_id')">${esc(b.book_id)}</div>
-      <div class="td" ondblclick="editTd(this,${i},'book_category')">${esc(b.book_category)}</div>
-      <div class="td" ondblclick="editTd(this,${i},'curriculum')">${esc(b.curriculum)}</div>
-      <div class="td t-white" ondblclick="editTd(this,${i},'subject')">${esc(b.subject)}</div>
-      <div class="td" ondblclick="editTd(this,${i},'book_publisher')">${esc(b.book_publisher)}</div>
-      <div class="td" style="color:var(--orange2);font-weight:600;font-family:var(--mono);font-size:11px" ondblclick="editTd(this,${i},'grade')">${esc(b.grade)}</div>
-      <div class="td" style="text-align:center;color:var(--white);font-weight:600;font-family:var(--mono)">${b.tot}</div>
-      <div class="td" style="color:${iss==='—'?'var(--text3)':'var(--amber)'};font-size:10.5px" title="${esc(iss)}">${esc(iss.slice(0,35)+(iss.length>35?'…':''))}</div>
-    `;
+    row.className=`virt-row ${r._status}${r._sel?' sel':''}`;
+    row.innerHTML = defs.map(c=>{
+      const style=`width:${c.w}px`;
+      if(c.k==='_cb') return `<div class="td" style="${style}"><input type="checkbox" class="row-cb"${r._sel?' checked':''} onchange="toggleRow(${i},this)"></div>`;
+      if(c.k==='_no') return `<div class="td" style="${style};color:var(--text3);font-family:var(--mono);font-size:10px">${r._rowIndex}</div>`;
+      if(c.k==='_st') return `<div class="td" style="${style}">${r._status==='ok'?'<div class="s-ok"></div>':r._status==='warn'?'<div class="s-wn"></div>':'<div class="s-er"></div>'}</div>`;
+      if(c.k==='_iss') return `<div class="td" style="${style};color:${iss==='—'?'var(--text3)':'var(--amber)'};font-size:10.5px" title="${esc(iss)}">${esc(iss.slice(0,40)+(iss.length>40?'…':''))}</div>`;
+      const v=r[c.k];
+      const cls = v===null ? 'td t-null' : 'td';
+      return `<div class="${cls}" style="${style}" ondblclick="editTd(this,${i},'${esc(c.k)}')">${v===null?'null':esc(String(v))}</div>`;
+    }).join('');
     rw.appendChild(row);
   }
 }
 function editTd(td,idx,field){
-  const b=filtRows[idx]; if(!b) return;
-  const cur=b[field]||'';
+  const r=filtRows[idx]; if(!r) return;
+  const cur=r[field]==null?'':r[field];
   td.classList.add('editing'); td.innerHTML='';
   const inp=document.createElement('input'); inp.value=cur;
   td.appendChild(inp); inp.focus(); inp.select();
-  const save=()=>{ b[field]=inp.value.trim(); td.classList.remove('editing'); renderVirt(); updActBar(); };
+  const save=()=>{
+    const col=activeCols().find(c=>c.name===field);
+    if(col){ const {value}=coerceValue(inp.value,col.type); r[field]=value; }
+    else r[field]=inp.value;
+    td.classList.remove('editing'); renderVirt(); updActBar();
+  };
   inp.onblur=save;
-  inp.onkeydown=e=>{ if(e.key==='Enter')save(); if(e.key==='Escape'){td.innerHTML=esc(cur);td.classList.remove('editing');} };
+  inp.onkeydown=e=>{ if(e.key==='Enter')save(); if(e.key==='Escape'){renderVirt();} };
 }
-function toggleRow(i,cb){ const b=filtRows[i]; if(b) b._sel=cb.checked; updActBar(); }
-function selAllCb(cb){ filtRows.forEach(b=>b._sel=cb.checked); selAll=cb.checked; renderVirt(); updActBar(); }
+function toggleRow(i,cb){ const r=filtRows[i]; if(r) r._sel=cb.checked; updActBar(); }
+function selAllCb(cb){ filtRows.forEach(r=>r._sel=cb.checked); selAll=cb.checked; renderVirt(); updActBar(); }
 function toggleAll(){
   selAll=!selAll;
-  filtRows.forEach(b=>b._sel=selAll);
+  filtRows.forEach(r=>r._sel=selAll);
   const cb=document.getElementById('selAllCb'); if(cb) cb.checked=selAll;
   renderVirt(); updActBar();
 }
@@ -1108,13 +1528,12 @@ function filterTable(){
   if(!udm) return;
   const q=document.getElementById('srch').value.toLowerCase();
   const sf=document.getElementById('statusFlt').value;
-  const cf=document.getElementById('catFlt').value;
-  const gf=document.getElementById('gradeFlt').value;
-  filtRows=udm.books.filter(b=>{
-    if(sf!=='all'&&b._status!==sf) return false;
-    if(cf!=='all'&&b.book_category!==cf) return false;
-    if(gf!=='all'&&b.grade!==gf) return false;
-    if(q&&!`${b.subject} ${b.book_category} ${b.curriculum} ${b.book_publisher} ${b.grade} ${b.book_id}`.toLowerCase().includes(q)) return false;
+  filtRows=udm.records.filter(r=>{
+    if(sf!=='all'&&r._status!==sf) return false;
+    if(q){
+      const hay=activeCols().map(c=>r[c.name]).join(' ').toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
     return true;
   });
   document.getElementById('visCount').textContent=filtRows.length;
@@ -1123,105 +1542,50 @@ function filterTable(){
 }
 function sortBy(k){
   if(sortK===k) sortD*=-1; else{sortK=k;sortD=1;}
-  COLS.forEach(c=>{ const el=document.getElementById('si_'+c.k); if(el) el.textContent=''; });
+  document.querySelectorAll('[id^="si_"]').forEach(el=>el.textContent='');
   const el=document.getElementById('si_'+k); if(el) el.textContent=sortD===1?' ↑':' ↓';
-  filtRows.sort((a,b)=>(String(a[k]||'')).localeCompare(String(b[k]||''),undefined,{numeric:true})*sortD);
+  filtRows.sort((a,b)=>(String(a[k]??'')).localeCompare(String(b[k]??''),undefined,{numeric:true})*sortD);
   renderVirt();
 }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    QUALITY REPORT
-══════════════════════════════════════ */
-function showQualReport(qr){
+══════════════════════════════════════════════════════════════════ */
+function showQualReport(){
   document.getElementById('qualSection').style.display='block';
+  const qr=udm.qr;
   const items=[
     {l:'Total Rows',v:qr.total,c:'qv-or'},{l:'✅ Ready',v:qr.ok,c:'qv-gr'},
     {l:'⚠ Warnings',v:qr.warn,c:'qv-yw'},{l:'❌ Skipped',v:qr.err,c:'qv-re'},
-    {l:'🔁 Duplicates',v:qr.dups,c:'qv-yw'},{l:'🔧 Auto-fixed',v:qr.fixed,c:'qv-yw'},
-    {l:'📦 No Publisher',v:qr.noPublisher,c:'qv-bl'},{l:'📚 No Curriculum',v:qr.noCurric,c:'qv-bl'},
+    {l:'🔁 Duplicate Rows',v:qr.dupCount,c:'qv-yw'},{l:'🔧 Auto-fixed Issues',v:qr.fixed,c:'qv-yw'},
+    {l:'📈 Avg Completeness',v:qr.completeness+'%',c:'qv-bl'},{l:'🧬 Columns Mapped',v:`${activeCols().length}/${udm.columns.length}`,c:'qv-bl'},
   ];
   document.getElementById('qGrid').innerHTML=items.map(i=>`<div class="q-item"><div class="q-lbl">${i.l}</div><div class="q-val ${i.c}">${i.v}</div></div>`).join('');
 }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    ACTION BAR
-══════════════════════════════════════ */
-function getSelBooks(){
+══════════════════════════════════════════════════════════════════ */
+function getSelRecords(){
   if(!udm) return [];
-  const sel=filtRows.filter(b=>b._sel&&b._status!=='error');
-  return sel.length>0?sel:udm.books.filter(b=>b._status!=='error');
+  const sel=filtRows.filter(r=>r._sel&&r._status!=='error');
+  return sel.length>0?sel:udm.records.filter(r=>r._status!=='error');
 }
 function updActBar(){
-  const sel=getSelBooks();
-  document.getElementById('actCount').textContent=`${sel.length} books selected`;
-  document.getElementById('importBtn').textContent=`🚀 Import ${sel.length} Books to DB`;
+  const sel=getSelRecords();
+  document.getElementById('actCount').textContent=`${sel.length} records selected`;
+  const btn=document.getElementById('importBtn');
+  btn.textContent=`🚀 Import ${sel.length} Records to Database`;
+  btn.disabled = sel.length===0 || !udm.tableName || udm.tableExists===null;
 }
 
-/* ══════════════════════════════════════
-   SUPABASE IMPORT — FIXED
-   Key fixes vs old version:
-   1. No 'Content-Profile' header (caused PGRST204)
-   2. Prefer: 'return=minimal' only (no merge-duplicates)
-   3. Connection test uses correct endpoint + headers
-   4. Detailed error parsing from PostgREST responses
-══════════════════════════════════════ */
-async function showImportModal(){
-  const books=getSelBooks();
-  const modal=document.getElementById('modal');
-  const info=document.getElementById('modalInfo');
-
-  // Reset modal state
-  document.getElementById('dbProgress').style.display='none';
-  document.getElementById('dbLog').innerHTML='';
-  document.getElementById('modalConfirmBtn').disabled=true;
-  document.getElementById('modalConfirmBtn').textContent='⏳ Testing connection…';
-  document.getElementById('modalConfirmBtn').style.background='';
-
-  // Banner: testing
-  const banner=document.getElementById('modalConnBanner');
-  const bannerTxt=document.getElementById('modalConnTxt');
-  banner.className='conn-banner testing show';
-  bannerTxt.textContent='Testing connection to Supabase books table…';
-
-  info.innerHTML=`
-    <div class="modal-row"><span class="modal-key">Source File</span><span class="modal-val">${esc(udm?.metadata?.fileName||'unknown')}</span></div>
-    <div class="modal-row"><span class="modal-key">Records to Import</span><span class="modal-val" style="color:var(--orange)">${books.length}</span></div>
-    <div class="modal-row"><span class="modal-key">Ready</span><span class="modal-val" style="color:var(--green)">${books.filter(b=>b._status==='ok').length}</span></div>
-    <div class="modal-row"><span class="modal-key">With Warnings</span><span class="modal-val" style="color:var(--amber)">${books.filter(b=>b._status==='warn').length}</span></div>
-    <div class="modal-row"><span class="modal-key">Target Table</span><span class="modal-val">public.books</span></div>
-    <div class="modal-row"><span class="modal-key">Supabase Project</span><span class="modal-val">uvispwigefzhjvkqcxkm</span></div>
-  `;
-
-  // Preview
-  const prev=document.getElementById('dbPreview');
-  const sample=books.slice(0,5);
-  const fields=['book_id','book_category','curriculum','subject','book_publisher','grade','tot'];
-  prev.innerHTML=`<table>
-    <tr>${fields.map(f=>`<th>${f}</th>`).join('')}</tr>
-    ${sample.map(b=>`<tr>${fields.map(f=>`<td>${esc(String(b[f]||'').slice(0,25))}</td>`).join('')}</tr>`).join('')}
-    ${books.length>5?`<tr><td colspan="${fields.length}" style="color:var(--text3);text-align:center;padding:6px">… and ${books.length-5} more rows</td></tr>`:''}
-  </table>`;
-
-  modal.className='modal-overlay show';
-
-  // Run connection test after modal opens
-  await wait(100);
-  const connOk=await pingSupabase(false);
-  if(connOk){
-    banner.className='conn-banner ok show';
-    bannerTxt.textContent='✓ Connected to Supabase — books table is accessible';
-    document.getElementById('modalConfirmBtn').disabled=false;
-    document.getElementById('modalConfirmBtn').textContent=`✅ Confirm & Import ${books.length} Books`;
-  } else {
-    banner.className='conn-banner fail show';
-    bannerTxt.textContent='✗ Cannot reach Supabase. Check network / RLS policies and try again.';
-    document.getElementById('modalConfirmBtn').disabled=false;
-    document.getElementById('modalConfirmBtn').textContent='⚠ Retry Import Anyway';
-  }
-}
-
+/* ══════════════════════════════════════════════════════════════════
+   IMPORT PIPELINE
+   1. ensure table exists (RPC, only if missing)
+   2. add any missing columns (RPC, only if needed)
+   3. batch insert / upsert via PostgREST, chunked, with retries
+══════════════════════════════════════════════════════════════════ */
 function closeModal(){ document.getElementById('modal').className='modal-overlay'; }
-
 function dbLog(msg, type=''){
   const log=document.getElementById('dbLog');
   const line=document.createElement('div');
@@ -1230,10 +1594,102 @@ function dbLog(msg, type=''){
   log.appendChild(line); log.scrollTop=log.scrollHeight;
 }
 
-async function executeSupabaseImport(){
-  const books=getSelBooks();
-  if(!books.length){ toast('No books to import','err'); return; }
+async function showImportModal(){
+  const records=getSelRecords();
+  const modal=document.getElementById('modal');
+  const info=document.getElementById('modalInfo');
+  const newCols = udm.columns.filter(c=>c.action==='new').length;
 
+  document.getElementById('dbProgress').style.display='none';
+  document.getElementById('dbLog').innerHTML='';
+  document.getElementById('failedRowsBtn').style.display='none';
+  document.getElementById('modalConfirmBtn').disabled=true;
+  document.getElementById('modalConfirmBtn').textContent='⏳ Testing connection…';
+  document.getElementById('modalConfirmBtn').style.background='';
+
+  const upsertRow=document.getElementById('upsertRow');
+  const candidateKey = udm.columns.find(c=>c.action!=='skip' && /(^id$|_id$|sku|isbn|email|code)/i.test(c.name));
+  if(candidateKey){
+    upsertRow.style.display='flex';
+    document.getElementById('upsertKeyLbl').textContent=candidateKey.name;
+    udm._upsertKey = candidateKey.name;
+  } else { upsertRow.style.display='none'; udm._upsertKey=null; }
+
+  const banner=document.getElementById('modalConnBanner');
+  const bannerTxt=document.getElementById('modalConnTxt');
+  banner.className='conn-banner testing show';
+  bannerTxt.textContent='Testing connection to Supabase…';
+
+  info.innerHTML=`
+    <div class="modal-row"><span class="modal-key">Source File</span><span class="modal-val">${esc(udm.metadata.fileName)}</span></div>
+    <div class="modal-row"><span class="modal-key">Target Table</span><span class="modal-val">public.${esc(udm.tableName)}</span></div>
+    <div class="modal-row"><span class="modal-key">Records to Import</span><span class="modal-val" style="color:var(--orange)">${records.length}</span></div>
+    <div class="modal-row"><span class="modal-key">Schema Changes</span><span class="modal-val">${udm.tableExists===false?'create table':newCols>0?`add ${newCols} column(s)`:'none needed'}</span></div>
+  `;
+
+  const cols = activeCols();
+  const prev=document.getElementById('dbPreview');
+  const sample=records.slice(0,5);
+  prev.innerHTML=`<table>
+    <tr>${cols.map(c=>`<th>${esc(c.name)}</th>`).join('')}</tr>
+    ${sample.map(r=>`<tr>${cols.map(c=>`<td>${esc(String(r[c.name]??'').slice(0,25))}</td>`).join('')}</tr>`).join('')}
+    ${records.length>5?`<tr><td colspan="${cols.length}" style="color:var(--text3);text-align:center;padding:6px">… and ${records.length-5} more rows</td></tr>`:''}
+  </table>`;
+
+  modal.className='modal-overlay show';
+  await wait(100);
+  const connOk = await pingSupabase(false);
+  if(connOk){
+    banner.className='conn-banner ok show';
+    bannerTxt.textContent='✓ Connected to Supabase';
+    document.getElementById('modalConfirmBtn').disabled=false;
+    document.getElementById('modalConfirmBtn').textContent=`✅ Confirm & Import ${records.length} Records`;
+  } else {
+    banner.className='conn-banner fail show';
+    bannerTxt.textContent='✗ Cannot reach Supabase. Check network / project URL and try again.';
+    document.getElementById('modalConfirmBtn').disabled=false;
+    document.getElementById('modalConfirmBtn').textContent='⚠ Retry Anyway';
+  }
+}
+
+async function ensureSchema(){
+  const newCols = udm.columns.filter(c=>c.action==='new').map(c=>({name:c.name, type:c.sqlType}));
+  if(udm.tableExists===false){
+    dbLog(`Creating table public.${udm.tableName} with ${newCols.length} column(s)…`,'info');
+    await sbRpc('import_engine_ensure_table', {p_table: udm.tableName, p_columns: newCols});
+    dbLog(`✓ Table public.${udm.tableName} created`);
+    udm.tableExists = true;
+  } else if(newCols.length>0){
+    dbLog(`Adding ${newCols.length} missing column(s) to public.${udm.tableName}…`,'info');
+    await sbRpc('import_engine_add_columns', {p_table: udm.tableName, p_columns: newCols});
+    dbLog(`✓ Columns added`);
+  } else {
+    dbLog(`No schema changes needed — public.${udm.tableName} already has every required column.`,'info');
+  }
+}
+
+async function postBatch(payload, attempt=1){
+  const upsert = document.getElementById('upsertChk').checked && udm._upsertKey;
+  const url = upsert
+    ? `${SB_URL}/rest/v1/${udm.tableName}?on_conflict=${udm._upsertKey}`
+    : `${SB_URL}/rest/v1/${udm.tableName}`;
+  const prefer = upsert ? 'return=minimal,resolution=merge-duplicates' : 'return=minimal';
+  try{
+    const resp = await fetch(url, { method:'POST', headers: sbHeaders({'Prefer':prefer}), body: JSON.stringify(payload) });
+    if(resp.status===200||resp.status===201||resp.status===204) return {ok:true};
+    let errMsg=`HTTP ${resp.status}`;
+    try{ const ej=JSON.parse(await resp.text()); errMsg=`[${ej.code||resp.status}] ${ej.message||ej.hint||''}`; }catch(e){}
+    if(resp.status>=500 && attempt<3){ await wait(400*attempt); return postBatch(payload, attempt+1); }
+    return {ok:false, error:errMsg, status:resp.status};
+  }catch(e){
+    if(attempt<3){ await wait(400*attempt); return postBatch(payload, attempt+1); }
+    return {ok:false, error:e.message};
+  }
+}
+
+async function executeImport(){
+  const records=getSelRecords();
+  if(!records.length){ toast('No records to import','err'); return; }
   const btn=document.getElementById('modalConfirmBtn');
   btn.disabled=true; btn.textContent='⏳ Importing…';
   document.getElementById('dbProgress').style.display='block';
@@ -1241,157 +1697,119 @@ async function executeSupabaseImport(){
   const lbl=document.getElementById('dbProgLbl');
   document.getElementById('dbLog').innerHTML='';
 
-  dbLog(`Starting import of ${books.length} records into public.${SB_TABLE}…`,'info');
-  dbLog(`Endpoint: ${SB_URL}/rest/v1/${SB_TABLE}`,'info');
+  dbLog(`Starting import of ${records.length} records → public.${udm.tableName}`,'info');
 
-  /* Build payload with ONLY the 7 columns in the books table.
-     - Null for optional empty strings (cleaner DB)
-     - tot always a positive integer
-  */
-  const payload=books.map(b=>({
-    book_id       : String(b.book_id).trim(),
-    book_category : String(b.book_category||'Student').trim(),
-    curriculum    : String(b.curriculum||'').trim() || null,
-    subject       : String(b.subject||'').trim(),
-    book_publisher: String(b.book_publisher||'').trim() || null,
-    grade         : String(b.grade||'').trim() || null,
-    tot           : parseInt(b.tot) || 1
-  }));
+  try{
+    await ensureSchema();
+  }catch(e){
+    dbLog(`✗ Schema setup failed: ${e.message}`,'err');
+    dbLog('  → If this is "function not found", run supabase_setup.sql in the SQL Editor first.','warn');
+    btn.disabled=false; btn.textContent='✗ Schema setup failed — Retry';
+    toast('❌ Schema setup failed: '+e.message,'err');
+    return;
+  }
 
-  const BATCH=50;
-  let done=0, errors=0;
-  const endpoint=`${SB_URL}/rest/v1/${SB_TABLE}`;
+  const cols = activeCols();
+  const payload = records.map(r=>{
+    const row={ _import_batch: udm.importBatch, _raw: udm.rawRows[r._rowIndex-1] ?? null };
+    cols.forEach(c=>{ row[c.name]=r[c.name]; });
+    return row;
+  });
 
+  const BATCH=500;
+  let done=0; const failedRecords=[];
   for(let i=0;i<payload.length;i+=BATCH){
     const batch=payload.slice(i,i+BATCH);
     const batchNum=Math.ceil((i+1)/BATCH);
-    try{
-      const resp=await fetch(endpoint,{
-        method:'POST',
-        headers: sbHeaders({'Prefer':'return=minimal'}),  // ← Fixed: no Content-Profile, no merge-duplicates
-        body:JSON.stringify(batch)
-      });
-
-      if(resp.status===200||resp.status===201||resp.status===204){
-        done+=batch.length;
-        dbLog(`✓ Batch ${batchNum} (${batch.length} rows) → saved successfully`);
-      } else {
-        // Parse Supabase/PostgREST error
-        let errMsg=`HTTP ${resp.status}`;
-        try{
-          const errBody=await resp.text();
-          const ej=JSON.parse(errBody);
-          errMsg=`[${ej.code||resp.status}] ${ej.message||ej.hint||errBody.slice(0,120)}`;
-        }catch(pe){
-          const raw=await resp.text().catch(()=>'');
-          errMsg=`HTTP ${resp.status}: ${raw.slice(0,120)}`;
-        }
-        errors+=batch.length;
-        dbLog(`✗ Batch ${batchNum} failed: ${errMsg}`,'err');
-
-        // Diagnostic hints
-        if(resp.status===401||resp.status===403){
-          dbLog('  → Check RLS policies: anon role may need INSERT permission on books table','warn');
-        } else if(resp.status===404){
-          dbLog('  → Table not found — verify the table name is exactly "books" in public schema','warn');
-        } else if(resp.status===409){
-          dbLog('  → Conflict (duplicate book_id). Consider editing IDs or clearing the table first','warn');
-        } else if(resp.status===422){
-          dbLog('  → Unprocessable data — check column types match (tot should be integer)','warn');
-        }
-      }
-    } catch(e){
-      errors+=batch.length;
-      dbLog(`✗ Batch ${batchNum} network error: ${e.message}`,'err');
+    const result = await postBatch(batch);
+    if(result.ok){
+      done+=batch.length;
+      dbLog(`✓ Batch ${batchNum} (${batch.length} rows) saved`);
+    } else {
+      dbLog(`✗ Batch ${batchNum} failed: ${result.error}`,'err');
+      if(result.status===401||result.status===403) dbLog('  → Check RLS policies: the relevant role may need INSERT permission','warn');
+      else if(result.status===409) dbLog('  → Conflict — try enabling upsert with a unique key column','warn');
+      else if(result.status===422) dbLog('  → Unprocessable data — a value may not match its column type','warn');
+      failedRecords.push(...records.slice(i,i+BATCH));
     }
-
     const pct=Math.min(100,Math.round(((i+BATCH)/payload.length)*100));
     fill.style.width=pct+'%';
     lbl.textContent=`${Math.min(i+BATCH,payload.length)} / ${payload.length} records`;
     await yld();
   }
-
   fill.style.width='100%';
 
-  if(errors===0){
-    dbLog(`🎉 Success! All ${done} records saved to ScholarLib database.`);
-    btn.textContent='✅ Done!';
-    btn.style.background='var(--green)';
-    btn.style.color='#000';
-    toast(`🎉 ${done} books imported to Supabase!`,'ok');
+  if(failedRecords.length===0){
+    dbLog(`🎉 Success! All ${done} records saved to public.${udm.tableName}.`);
+    btn.textContent='✅ Done!'; btn.style.background='var(--green)'; btn.style.color='#000';
+    toast(`🎉 ${done} records imported!`,'ok');
     setPill('Imported ✓','done');
     document.getElementById('dbBadge').style.display='flex';
-    document.getElementById('connBadge').className='conn-badge connected';
-    document.getElementById('connTxt').textContent=`${done} Imported ✓`;
-    // Re-ping to confirm
-    setTimeout(()=>pingSupabase(false),1500);
-    window.parent&&window.parent!==window&&window.parent.postMessage({type:'SCHOLARLIB_IMPORT',count:done,table:SB_TABLE},'*');
   } else {
-    dbLog(`⚠ Finished: ${done} saved, ${errors} failed.`,errors>0?'warn':'');
+    udm._failedRecords = failedRecords;
+    dbLog(`⚠ Finished: ${done} saved, ${failedRecords.length} failed.`,'warn');
     btn.disabled=false;
-    btn.textContent=errors===payload.length?`✗ All Failed — Retry`:`⚠ Partial (${done}/${payload.length}) — Retry`;
-    if(errors===payload.length){
-      dbLog('All batches failed. Common causes:','warn');
-      dbLog('  1. RLS (Row Level Security) blocks anon inserts → disable RLS or add INSERT policy','warn');
-      dbLog('  2. Table schema mismatch → check column names in Supabase table editor','warn');
-      dbLog('  3. Network / CORS → try from a different network','warn');
-    }
-    toast(`⚠ ${done} imported, ${errors} errors. Check log.`,'err');
+    btn.textContent = failedRecords.length===records.length ? '✗ All Failed — Retry' : `⚠ Partial (${done}/${records.length}) — Retry remaining`;
+    document.getElementById('failedRowsBtn').style.display='block';
+    toast(`⚠ ${done} imported, ${failedRecords.length} failed`,'err');
   }
 }
 
-/* ══════════════════════════════════════
-   EXPORTS
-══════════════════════════════════════ */
-function buildPayload(){
-  const books=getSelBooks();
-  return {
-    importMeta:{engineVersion:'2.1-PRO',importedAt:new Date().toISOString(),sourceFile:udm?.metadata?.fileName,table:SB_TABLE,total:books.length},
-    books:books.map(b=>({book_id:b.book_id,book_category:b.book_category,curriculum:b.curriculum,subject:b.subject,book_publisher:b.book_publisher,grade:b.grade,tot:b.tot}))
-  };
-}
+/* ══════════════════════════════════════════════════════════════════
+   EXPORTS — JSON / CSV adapt to whatever columns exist; Schema SQL
+   ships the exact DDL so the user can run it by hand if preferred.
+══════════════════════════════════════════════════════════════════ */
+function csvQ(v){ const s=String(v??''); return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:s; }
+function dl(blob,name){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+
 function dlJSON(){
-  dl(new Blob([JSON.stringify(buildPayload(),null,2)],{type:'application/json'}),'scholarlib_books.json');
+  const records=getSelRecords(); const cols=activeCols();
+  const payload={
+    importMeta:{engineVersion:'3.0-universal', importedAt:new Date().toISOString(), sourceFile:udm.metadata.fileName, table:udm.tableName, total:records.length, columns:cols.map(c=>c.name)},
+    records: records.map(r=>{ const o={}; cols.forEach(c=>o[c.name]=r[c.name]); return o; })
+  };
+  dl(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}), `${udm.tableName}.json`);
   toast('⬇ JSON downloaded!');
 }
 function dlCSV(){
-  const books=getSelBooks();
-  const h=['book_id','book_category','curriculum','subject','book_publisher','grade','tot'];
-  const lines=[h.join(','),...books.map(b=>h.map(k=>csvQ(b[k]||'')).join(','))];
-  dl(new Blob([lines.join('\n')],{type:'text/csv'}),'scholarlib_books.csv');
+  const records=getSelRecords(); const cols=activeCols();
+  const lines=[cols.map(c=>c.name).join(','), ...records.map(r=>cols.map(c=>csvQ(r[c.name])).join(','))];
+  dl(new Blob([lines.join('\n')],{type:'text/csv'}), `${udm.tableName}.csv`);
   toast('⬇ CSV downloaded!');
 }
-function dlSchemaCSV(){
-  const books=getSelBooks();
-  const lines=['book_id,book_category,curriculum,subject,book_publisher,grade,tot'];
-  books.forEach(b=>lines.push(['book_id','book_category','curriculum','subject','book_publisher','grade','tot'].map(k=>csvQ(b[k]||'')).join(',')));
-  dl(new Blob([lines.join('\n')],{type:'text/csv'}),'scholarlib_schema_export.csv');
-  toast('⬇ Schema CSV downloaded!');
+function dlSchemaSQL(){
+  const sql = `-- Generated by BILLAN AI Universal Import Engine\n-- Source: ${udm.metadata.fileName}\n\n${planDDL().replace(/<[^>]+>/g,'')}\n`;
+  dl(new Blob([sql],{type:'text/plain'}), `${udm.tableName}_schema.sql`);
+  toast('⬇ Schema SQL downloaded!');
 }
-function csvQ(v){ const s=String(v); return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:s; }
-function dl(blob,name){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+function dlFailedRows(){
+  if(!udm._failedRecords || !udm._failedRecords.length){ toast('No failed rows to download','err'); return; }
+  const cols=activeCols();
+  const lines=[cols.map(c=>c.name).join(','), ...udm._failedRecords.map(r=>cols.map(c=>csvQ(r[c.name])).join(','))];
+  dl(new Blob([lines.join('\n')],{type:'text/csv'}), `${udm.tableName}_failed_rows.csv`);
+  toast('⬇ Failed rows downloaded!');
+}
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    RESET
-══════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════ */
 function startOver(){
-  udm=null; filtRows=[]; selAll=false; idCtr=1; sortK=null; sortD=1;
+  udm=null; filtRows=[]; selAll=false; sortK=null; sortD=1;
   document.getElementById('uploadZone').style.display='block';
   document.getElementById('botPanel').className='bot-panel';
-  ['mapSection','prevSection','qualSection'].forEach(id=>document.getElementById(id).style.display='none');
+  ['datasetSection','mapSection','ddlSection','prevSection','qualSection'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('statsBar').style.display='none';
   document.getElementById('actBar').className='act-bar';
   document.getElementById('startOverBtn').style.display='none';
   document.getElementById('dbBadge').style.display='none';
   document.getElementById('fileInput').value='';
-  document.getElementById('srch').value='';
-  document.getElementById('catFlt').innerHTML='<option value="all">All Categories</option>';
-  document.getElementById('gradeFlt').innerHTML='<option value="all">All Grades</option>';
+  const srch=document.getElementById('srch'); if(srch) srch.value='';
   closeModal(); clearChat();
   setPill('Ready','');
 }
 
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 </script>
+
 </body>
 </html>
